@@ -74,16 +74,17 @@ def run_check(activity_url, check_id, report_data, dashboard_data):
         else:
             raise RuntimeError("Failed to locate screenshot element after retries")
 
-        # Select green radio button
+        # Select green or red radio button based on status code
+        radio_id = "green" if status_code == 200 else "red"
         for _ in range(3):
             try:
-                green_radio = wait.until(EC.element_to_be_clickable((By.ID, "green")))
-                driver.execute_script("arguments[0].click();", green_radio)
+                radio_btn = wait.until(EC.element_to_be_clickable((By.ID, radio_id)))
+                driver.execute_script("arguments[0].click();", radio_btn)
                 break
             except Exception as e:
                 time.sleep(0.5)
         else:
-            raise RuntimeError("Failed to click green radio button after retries")
+            raise RuntimeError(f"Failed to click {radio_id} radio button after retries")
 
         # Enter name
         for _ in range(3):
@@ -99,14 +100,18 @@ def run_check(activity_url, check_id, report_data, dashboard_data):
         submit_btn = wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(@class, 'submit-btn')]")))
         driver.execute_script("arguments[0].click();", submit_btn)
 
-        # Collect data for dashboard
+        # Collect data for dashboard with radioChoice set according to status code
+        if status_code == 200:
+            radio_choice = 'Green'
+        else:
+            radio_choice = 'Red'
         dashboard_data.append({
             'id': check_id,
             'siteName': target_url,
             'responseCode': status_code,
             'status': "Checked" if status_code == 200 else "Not Checked",
             'reason': reason,
-            'radioChoice': 'Green'
+            'radioChoice': radio_choice
         })
 
         print(f"Check {check_id} completed successfully.")
