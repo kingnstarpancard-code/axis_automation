@@ -182,22 +182,9 @@ def main():
     dashboard_data = []
 
     # Run all checks in parallel using threads (headless)
-    import threading
-
-    lock = threading.Lock()
     threads = []
     for i, url in enumerate(activity_urls, start=1):
-        # Wrap the run_check call to update localStorage and refresh dashboard after each check
-        def run_check_and_update(url=url, check_id=i):
-            run_check(url, check_id, report_data, dashboard_data)
-            with lock:
-                # Update localStorage in main driver with incremental data
-                main_driver.execute_script("localStorage.setItem('reportData', JSON.stringify(arguments[0]));", dashboard_data)
-                checked_ids = list(range(1, len(dashboard_data) + 1))
-                main_driver.execute_script(f"localStorage.setItem('checked', JSON.stringify({checked_ids}));")
-                main_driver.refresh()
-
-        t = threading.Thread(target=run_check_and_update)
+        t = threading.Thread(target=run_check, args=(url, i, report_data, dashboard_data))
         threads.append(t)
         t.start()
 
@@ -223,6 +210,16 @@ def main():
         print("Permission denied: Excel file is open. Saving as link_check_report_new.xlsx")
         wb.save("link_check_report_new.xlsx")
         print("Excel report generated: link_check_report_new.xlsx")
+
+    # Save dashboard data to localStorage for the dashboard
+    main_driver.execute_script("localStorage.setItem('reportData', JSON.stringify(arguments[0]));", dashboard_data)
+
+    # Update localStorage in main driver to mark all as checked
+    checked_ids = list(range(1, len(activity_urls) + 1))
+    main_driver.execute_script(f"localStorage.setItem('checked', JSON.stringify({checked_ids}));")
+
+    # Refresh the main page to show checked status
+    main_driver.refresh()
 
     print("Main page refreshed. Check if all activities are marked as checked.")
     input("Press Enter to exit...")

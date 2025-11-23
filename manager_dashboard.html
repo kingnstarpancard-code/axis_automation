@@ -65,20 +65,9 @@
     </table>
 
     <script>
-        // Fetch report data from JSON file with fallback to localStorage and populate the table
-        async function loadReportData() {
-            let reportData = [];
-            try {
-                const response = await fetch('report_data.json', {cache: "no-cache"});
-                if (response.ok) {
-                    reportData = await response.json();
-                } else {
-                    throw new Error("JSON file not found, fallback to localStorage");
-                }
-            } catch (err) {
-                // Fallback to localStorage
-                reportData = JSON.parse(localStorage.getItem('reportData')) || [];
-            }
+        // Function to get report data from localStorage and populate the table
+        function loadReportData() {
+            const reportData = JSON.parse(localStorage.getItem('reportData')) || [];
             const tableBody = document.querySelector('#reportTable tbody');
             tableBody.innerHTML = '';
 
@@ -135,12 +124,6 @@
         window.onload = () => {
             loadReportData();
         };
-
-        // Polling to refresh dashboard every 5 seconds
-        setInterval(() => {
-            loadReportData();
-        }, 5000);
-
     </script>
 </body>
 </html>
