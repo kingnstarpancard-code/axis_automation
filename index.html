@@ -238,6 +238,10 @@
         function checkLogin() {
             if (!localStorage.getItem('loggedIn')) {
                 window.location.href = 'login.html';
+            } else {
+                // Reset the checked and reportData on each login page load
+                localStorage.removeItem('checked');
+                localStorage.removeItem('reportData');
             }
         }
 
