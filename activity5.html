@@ -228,14 +228,18 @@
         }
 
         function checkScreenshot() {
-            const screenshot = document.getElementById('screenshot');
-            const submitBtn = document.querySelector('.submit-btn');
-            if (screenshot.files.length > 0) {
-                submitBtn.classList.add('enabled');
-            } else {
-                submitBtn.classList.remove('enabled');
-            }
-        }
+    const screenshot = document.getElementById('screenshot');
+    const submitBtn = document.getElementById('submit-btn');
+
+    if (screenshot.files.length > 0) {
+        submitBtn.classList.add('enabled');
+        submitBtn.disabled = false;
+    } else {
+        submitBtn.classList.remove('enabled');
+        submitBtn.disabled = true;
+    }
+}
+
 
         function submitCheck() {
             const screenshot = document.getElementById('screenshot');

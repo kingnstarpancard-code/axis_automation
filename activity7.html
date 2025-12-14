@@ -213,7 +213,15 @@
                         <input type="text" id="name" placeholder="Enter your name">
                     </div>
                     <button class="back-btn" onclick="window.location.href='index.html'">Back</button>
-                    <button class="submit-btn" onclick="submitCheck()">Submit</button>
+                    <button
+  class="submit-btn"
+  id="submit-btn"
+  data-testid="submit-button"
+  disabled
+  onclick="submitCheck()">
+  Submit
+</button>
+
                 </div>
             </div>
         </div>
@@ -228,14 +236,18 @@
         }
 
         function checkScreenshot() {
-            const screenshot = document.getElementById('screenshot');
-            const submitBtn = document.querySelector('.submit-btn');
-            if (screenshot.files.length > 0) {
-                submitBtn.classList.add('enabled');
-            } else {
-                submitBtn.classList.remove('enabled');
-            }
-        }
+    const screenshot = document.getElementById('screenshot');
+    const submitBtn = document.getElementById('submit-btn');
+
+    if (screenshot.files.length > 0) {
+        submitBtn.classList.add('enabled');
+        submitBtn.disabled = false;
+    } else {
+        submitBtn.classList.remove('enabled');
+        submitBtn.disabled = true;
+    }
+}
+
 
         function submitCheck() {
             const screenshot = document.getElementById('screenshot');
