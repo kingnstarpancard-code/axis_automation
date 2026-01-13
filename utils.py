@@ -5,6 +5,7 @@ Common utilities for alert engine system
 
 import json
 import logging
+import sys
 from typing import Dict, Any, List
 from datetime import datetime
 from pathlib import Path
@@ -20,12 +21,18 @@ class Logger:
     def setup_logging(self):
         """Configure logging"""
         
+        # Set UTF-8 encoding for console output on Windows
+        if sys.platform == 'win32':
+            import io
+            sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+            sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
+        
         logging.basicConfig(
             level=logging.INFO,
             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
             handlers=[
-                logging.FileHandler(self.log_file),
-                logging.StreamHandler()
+                logging.FileHandler(self.log_file, encoding='utf-8'),
+                logging.StreamHandler(sys.stdout)
             ]
         )
         

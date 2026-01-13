@@ -1,0 +1,32 @@
+2026-01-14 05:22:45,823 - AlertEngine - INFO - ============================================================
+2026-01-14 05:22:45,831 - AlertEngine - INFO - ============================================================
+2026-01-14 05:22:50,154 - AlertEngine - INFO - ============================================================
+2026-01-14 05:28:03,752 - AlertEngine - INFO - ============================================================
+2026-01-14 05:28:03,752 - AlertEngine - INFO - 📧 Sending Daily Email Digest
+2026-01-14 05:28:03,752 - AlertEngine - INFO - ============================================================
+2026-01-14 05:28:03,752 - AlertEngine - INFO - 
+🔧 Configuration:
+2026-01-14 05:28:03,752 - AlertEngine - INFO -   ├─ From Email: kingnstarpancard@gmail.com
+2026-01-14 05:28:03,752 - AlertEngine - INFO -   ├─ Gmail SMTP: ✓ Set
+2026-01-14 05:28:03,752 - AlertEngine - INFO -   └─ Dry Run: ✗ No
+2026-01-14 05:28:03,752 - AlertEngine - INFO - 
+📊 Gathering statistics for last 24 hours...
+2026-01-14 05:28:03,752 - AlertEngine - INFO -   ├─ Total Alerts: 0
+2026-01-14 05:28:03,752 - AlertEngine - INFO -   ├─ Actionable: 0
+2026-01-14 05:28:03,752 - AlertEngine - INFO -   ├─ Test Defects: 0
+2026-01-14 05:28:03,752 - AlertEngine - INFO -   └─ Activities: 0
+2026-01-14 05:28:03,752 - AlertEngine - INFO - 
+🧪 Testing email configuration...
+2026-01-14 05:28:07,879 - AlertEngine - INFO -   ✓ Test email sent successfully
+2026-01-14 05:28:07,879 - AlertEngine - INFO - 
+▶️  Sending daily digest to sksahilahmed1604@gmail.com...
+2026-01-14 05:28:11,566 - AlertEngine - INFO -   ├─ Sent: 1
+2026-01-14 05:28:11,575 - AlertEngine - INFO -   ├─ Failed: 0
+2026-01-14 05:28:11,575 - AlertEngine - INFO -   └─ Total: 1
+2026-01-14 05:28:11,575 - AlertEngine - INFO - 
+✅ Email Summary:
+2026-01-14 05:28:11,575 - AlertEngine - INFO -   ├─ Total Sent: 2
+2026-01-14 05:28:11,575 - AlertEngine - INFO -   └─ Total Attempted: 2
+2026-01-14 05:28:11,575 - AlertEngine - INFO - 
+✅ Email digest completed at 2026-01-14T05:28:11.575197
+2026-01-14 05:28:11,575 - AlertEngine - INFO - ============================================================
