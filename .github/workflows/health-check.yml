@@ -109,7 +109,7 @@ jobs:
   # Send daily summary email
   send-email-digest:
     runs-on: ubuntu-latest
-    if: github.event_name == 'schedule' && github.run_number % 48 == 0  # Every 24 hours (2 runs)
+    if: github.event_name == 'schedule'
     
     needs: health-check
     
