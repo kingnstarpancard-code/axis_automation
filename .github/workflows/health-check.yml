@@ -41,7 +41,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install selenium requests openpyxl pyyaml sendgrid
+        pip install selenium requests openpyxl pyyaml
         
         # Download ChromeDriver
         pip install webdriver-manager
@@ -77,7 +77,7 @@ jobs:
         EXECUTION_ID: ${{ github.run_id }}_${{ github.run_number }}
     
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: health-check-report-${{ github.run_id }}
         path: |
@@ -124,13 +124,13 @@ jobs:
     
     - name: Install dependencies
       run: |
-        pip install sendgrid pyyaml
+        pip install pyyaml
     
     - name: Send daily email digest
       run: python send_daily_email.py
       env:
-        SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
-        FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+        EMAIL_USER: ${{ secrets.EMAIL_USER }}
+        EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
         RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
       continue-on-error: true
 

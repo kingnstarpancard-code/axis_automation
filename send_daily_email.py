@@ -24,8 +24,8 @@ def main():
     db = AlertDatabase()
     
     logger.info(f"\n🔧 Configuration:")
-    logger.info(f"  ├─ From Email: {notifier.from_email}")
-    logger.info(f"  ├─ SendGrid API: {'✓ Set' if not notifier.dry_run else '✗ Not set (dry-run)'}")
+    logger.info(f"  ├─ From Email: {notifier.email_user}")
+    logger.info(f"  ├─ Gmail SMTP: {'✓ Set' if not notifier.dry_run else '✗ Not set (dry-run)'}")
     logger.info(f"  └─ Dry Run: {'✓ Yes' if notifier.dry_run else '✗ No'}")
     
     # Get recipient email

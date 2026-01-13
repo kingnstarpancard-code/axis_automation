@@ -1,31 +1,34 @@
 """
 Email Alert Notifier
-Sends daily digest emails via SendGrid
+Sends daily digest emails via Gmail SMTP
 """
 
 import os
 import json
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from typing import Dict, List, Optional
 from datetime import datetime
 
 
 class EmailNotifier:
-    """Send email notifications via SendGrid"""
+    """Send email notifications via Gmail SMTP"""
     
-    def __init__(self, api_key: str = None, from_email: str = None):
+    def __init__(self, email_user: str = None, email_password: str = None):
         """
         Initialize email notifier
         
         Args:
-            api_key: SendGrid API key (from environment if not provided)
-            from_email: From email address
+            email_user: Gmail address (from environment if not provided)
+            email_password: Gmail app password (from environment if not provided)
         """
-        self.api_key = api_key or os.getenv('SENDGRID_API_KEY')
-        self.from_email = from_email or os.getenv('FROM_EMAIL', 'alerts@sahil-bank.local')
-        self.dry_run = not self.api_key
+        self.email_user = email_user or os.getenv('EMAIL_USER')
+        self.email_password = email_password or os.getenv('EMAIL_PASSWORD')
+        self.dry_run = not (self.email_user and self.email_password)
         
         if self.dry_run:
-            print("⚠️ Warning: SENDGRID_API_KEY not set. Emails in dry-run mode")
+            print("⚠️ Warning: EMAIL_USER or EMAIL_PASSWORD not set. Emails in dry-run mode")
         
         self.sent_emails = []
     
@@ -295,7 +298,7 @@ class EmailNotifier:
     
     def _send_email(self, to_email: str, subject: str, html_content: str) -> bool:
         """
-        Send email via SendGrid
+        Send email via Gmail SMTP
         
         Args:
             to_email: Recipient email
@@ -319,38 +322,39 @@ class EmailNotifier:
             return False
         
         try:
-            from sendgrid import SendGridAPIClient
-            from sendgrid.helpers.mail import Mail
-        except ImportError:
-            print("⚠️ sendgrid library not installed. Install with: pip install sendgrid")
-            return False
-        
-        try:
-            message = Mail(
-                from_email=self.from_email,
-                to_emails=to_email,
-                subject=subject,
-                html_content=html_content
-            )
+            # Create message
+            message = MIMEMultipart("alternative")
+            message["Subject"] = subject
+            message["From"] = self.email_user
+            message["To"] = to_email
             
-            sg = SendGridAPIClient(self.api_key)
-            response = sg.send(message)
+            # Attach HTML content
+            part = MIMEText(html_content, "html")
+            message.attach(part)
             
-            if response.status_code == 202:
-                self.sent_emails.append({
-                    "to": to_email,
-                    "subject": subject,
-                    "timestamp": datetime.now().isoformat(),
-                    "status": "sent"
-                })
-                print(f"✓ Email sent to {to_email}")
-                return True
-            else:
-                print(f"✗ SendGrid Error: {response.status_code}")
-                return False
+            # Send via Gmail SMTP
+            with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+                server.login(self.email_user, self.email_password)
+                server.sendmail(self.email_user, to_email, message.as_string())
+            
+            self.sent_emails.append({
+                "to": to_email,
+                "subject": subject,
+                "timestamp": datetime.now().isoformat(),
+                "status": "sent"
+            })
+            print(f"✓ Email sent to {to_email}")
+            return True
         
         except Exception as e:
             print(f"✗ Error sending email: {e}")
+            self.sent_emails.append({
+                "to": to_email,
+                "subject": subject,
+                "timestamp": datetime.now().isoformat(),
+                "status": "failed",
+                "error": str(e)
+            })
             return False
     
     def get_email_summary(self) -> Dict:
