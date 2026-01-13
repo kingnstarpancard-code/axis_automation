@@ -107,7 +107,7 @@ def run_check(activity_url, check_id, report_data, dashboard_data):
 # Main script
 main_driver = webdriver.Chrome()
 main_driver.maximize_window()
-main_driver.get("http://127.0.0.1:5502/axisbank/index.html")
+main_driver.get("http://127.0.0.1:5502/nvsbank/index.html")
 
 wait = WebDriverWait(main_driver, 10)
 

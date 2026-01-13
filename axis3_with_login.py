@@ -160,7 +160,7 @@ def main():
     wait = WebDriverWait(main_driver, 20)
 
     # Open index.html as the initial page
-    main_driver.get("https://kingnstarpancard-code.github.io/axis_automation/index.html")
+    main_driver.get("https://kingnstarpancard-code.github.io/nvs_automation/index.html")
 
     # Check if redirected to login page by checking URL or presence of login form elements
     current_url = main_driver.current_url

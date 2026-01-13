@@ -1,0 +1,263 @@
+# Alert Rules Configuration
+# Define rules for all 7 activities
+
+rules:
+  - id: "activity_1"
+    activity_name: "Account Verification"
+    url_pattern: "account-server.*"
+    
+    conditions:
+      - name: "response_time_threshold"
+        operator: ">"
+        value: 5000  # milliseconds
+        severity: 4
+      - name: "status_code"
+        operator: "!="
+        value: 200
+        severity: 8
+      - name: "connection_timeout"
+        operator: "exists"
+        severity: 7
+    
+    false_positives:
+      - reason: "Maintenance window"
+        days: [6]  # Sunday
+        hours: [22, 23]
+        suppress: true
+      - reason: "Known slow on Monday mornings"
+        days: [0]  # Monday
+        hours: [8, 9]
+        suppress: false  # Log but don't suppress
+    
+    escalation:
+      - score: ">85"
+        action: "create_critical_ticket"
+        notify: ["slack"]
+      - score: "70-85"
+        action: "create_ticket"
+        notify: ["slack"]
+      - score: "60-70"
+        action: "create_ticket"
+        notify: []
+    
+    frequency_threshold:
+      window_minutes: 5
+      max_alerts: 10
+      action: "deduplicate"
+
+  - id: "activity_2"
+    activity_name: "Transaction Review"
+    url_pattern: "transaction-server.*"
+    
+    conditions:
+      - name: "response_time_threshold"
+        operator: ">"
+        value: 5000
+        severity: 4
+      - name: "status_code"
+        operator: "!="
+        value: 200
+        severity: 9  # More critical than account
+      - name: "connection_error"
+        operator: "exists"
+        severity: 8
+    
+    false_positives:
+      - reason: "Backup running"
+        days: [1, 4]  # Tuesday, Friday
+        hours: [14, 15, 16]
+        suppress: true
+    
+    escalation:
+      - score: ">80"
+        action: "create_critical_ticket"
+        notify: ["slack", "email"]
+      - score: "60-80"
+        action: "create_ticket"
+        notify: ["slack"]
+
+  - id: "activity_3"
+    activity_name: "Loan Application Check"
+    url_pattern: "loan-server.*"
+    
+    conditions:
+      - name: "response_time_threshold"
+        operator: ">"
+        value: 5000
+        severity: 3
+      - name: "status_code"
+        operator: "!="
+        value: 200
+        severity: 7
+    
+    false_positives:
+      - reason: "EOD batch processing"
+        days: [1, 2, 3, 4, 5]  # Weekdays
+        hours: [17, 18, 19]
+        suppress: false
+    
+    escalation:
+      - score: ">80"
+        action: "create_ticket"
+        notify: ["slack"]
+
+  - id: "activity_4"
+    activity_name: "Customer Service Check"
+    url_pattern: ".*"
+    
+    conditions:
+      - name: "response_time_threshold"
+        operator: ">"
+        value: 3000  # Lower threshold
+        severity: 2
+      - name: "status_code"
+        operator: "!="
+        value: 200
+        severity: 5
+    
+    escalation:
+      - score: ">70"
+        action: "create_ticket"
+        notify: ["slack"]
+
+  - id: "activity_5"
+    activity_name: "Compliance Audit"
+    url_pattern: ".*"
+    
+    conditions:
+      - name: "response_time_threshold"
+        operator: ">"
+        value: 8000  # Higher tolerance
+        severity: 3
+      - name: "status_code"
+        operator: "!="
+        value: 200
+        severity: 6
+    
+    escalation:
+      - score: ">70"
+        action: "create_ticket"
+        notify: ["slack"]
+
+  - id: "activity_6"
+    activity_name: "Security Scan"
+    url_pattern: ".*"
+    
+    conditions:
+      - name: "response_time_threshold"
+        operator: ">"
+        value: 10000  # Highest tolerance
+        severity: 2
+      - name: "status_code"
+        operator: "!="
+        value: 200
+        severity: 5
+    
+    escalation:
+      - score: ">65"
+        action: "create_ticket"
+        notify: ["slack"]
+
+  - id: "activity_7"
+    activity_name: "Performance Metrics"
+    url_pattern: ".*"
+    
+    conditions:
+      - name: "response_time_threshold"
+        operator: ">"
+        value: 4000
+        severity: 3
+      - name: "status_code"
+        operator: "!="
+        value: 200
+        severity: 5
+    
+    escalation:
+      - score: ">70"
+        action: "create_ticket"
+        notify: ["slack"]
+
+# Global rules
+global_rules:
+  maintenance_windows:
+    - name: "Sunday Maintenance"
+      days: [6]
+      hours: [22, 23]
+      suppress_all_alerts: false
+      reduce_severity_by: 20
+  
+  alert_storms:
+    - name: "High frequency alerts"
+      threshold: 50
+      window_minutes: 5
+      action: "deduplicate_and_notify"
+  
+  cascade_failures:
+    - name: "Multiple service failures"
+      services_count: 3
+      window_minutes: 5
+      action: "create_single_incident"
+
+# Known false positives
+known_false_positives:
+  - activity: "Account Verification"
+    pattern: "License.*check.*failed"
+    reason: "Expected during license renewal"
+  - activity: "Transaction Review"
+    pattern: ".*timeout.*"
+    reason: "Network blip - auto-retries"
+    exclude_after_minutes: 5
+
+# Ticket creation thresholds
+ticket_creation:
+  minimum_score: 60
+  critical_score: 80
+  high_score: 70
+  medium_score: 60
+
+# Notification settings
+notifications:
+  slack:
+    enabled: true
+    webhook_required: true
+    channels:
+      critical: "#critical-alerts"
+      high: "#monitoring-alerts"
+      medium: "#monitoring-log"
+  
+  email:
+    enabled: true
+    sendgrid_required: true
+    daily_digest: true
+    digest_time: "08:00"
+    recipients:
+      - "admin@company.com"
+      - "ops@company.com"
+  
+  github:
+    enabled: true
+    labels:
+      critical: ["critical", "auto-generated"]
+      high: ["high", "auto-generated"]
+      medium: ["medium", "auto-generated"]
+      test: ["test-defect"]
+
+# Retention policies
+retention:
+  alerts_days: 30
+  tickets_days: 90
+  logs_days: 7
+
+# Defect injection settings
+defect_injection:
+  enabled: true
+  percentage: 25  # 25% of checks will have injected defects
+  distribution:
+    timeout: 15
+    slow_response: 20
+    connection_error: 12
+    duplicate_alert: 10
+    false_positive: 8
+    alert_storm: 5
+  exclude_activities: []
+  exclude_hours: [9, 10, 11, 14, 15, 16]  # Don't inject during business hours

@@ -1,0 +1,185 @@
+name: 24x7 Health Check - Automated Monitoring
+
+on:
+  schedule:
+    # Run every 30 minutes
+    - cron: '*/30 * * * *'
+  
+  # Allow manual trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      defects_enabled:
+        description: 'Enable defect injection'
+        required: false
+        default: 'true'
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      issues: write
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Cache dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install selenium requests openpyxl pyyaml sendgrid
+        
+        # Download ChromeDriver
+        pip install webdriver-manager
+    
+    - name: Run health checks (Selenium)
+      run: python axis3_enhanced.py
+      env:
+        DEFECTS_ENABLED: ${{ github.event.inputs.defects_enabled || 'true' }}
+        EXECUTION_ID: ${{ github.run_id }}_${{ github.run_number }}
+    
+    - name: Process alerts (Alert Engine)
+      run: python process_alerts.py
+      env:
+        EXECUTION_ID: ${{ github.run_id }}_${{ github.run_number }}
+    
+    - name: Create GitHub tickets
+      run: python create_tickets.py
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_REPO_OWNER: ${{ github.repository_owner }}
+        GITHUB_REPO_NAME: ${{ github.event.repository.name }}
+    
+    - name: Send Slack notifications
+      if: env.SLACK_WEBHOOK_URL != ''
+      run: python send_slack_notifications.py
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      continue-on-error: true
+    
+    - name: Generate reports
+      run: python generate_reports.py
+      env:
+        EXECUTION_ID: ${{ github.run_id }}_${{ github.run_number }}
+    
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: health-check-report-${{ github.run_id }}
+        path: |
+          link_check_report.xlsx
+          alert_report.json
+          ticket_summary.json
+    
+    - name: Publish to GitHub Pages
+      if: always()
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./reports
+        destination_dir: ${{ github.run_id }}
+      continue-on-error: true
+    
+    - name: Slack notification - Job Status
+      if: always()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
+        text: |
+          Health Check Job: ${{ job.status }}
+          Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        fields: repo,message,commit,author,action
+      continue-on-error: true
+
+  # Send daily summary email
+  send-email-digest:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' && github.run_number % 48 == 0  # Every 24 hours (2 runs)
+    
+    needs: health-check
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        pip install sendgrid pyyaml
+    
+    - name: Send daily email digest
+      run: python send_daily_email.py
+      env:
+        SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+        FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+        RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+      continue-on-error: true
+
+  # Dashboard update job
+  update-dashboard:
+    runs-on: ubuntu-latest
+    if: always()
+    
+    needs: health-check
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Update dashboard data
+      run: |
+        # Update dashboard with latest run results
+        echo "Dashboard data would be updated here"
+    
+    - name: Commit and push dashboard
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add dashboard_data.json || true
+        git commit -m "Update dashboard - Run ${{ github.run_id }}" || true
+        git push || true
+      continue-on-error: true
+
+# Scheduled cleanup job
+  cleanup:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule'
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Clean up old artifacts
+      run: |
+        # Keep only last 30 days of data
+        python -c "
+        from database import AlertDatabase
+        db = AlertDatabase()
+        db.cleanup_old_records(days=30)
+        print('✓ Cleanup completed')
+        "
+      continue-on-error: true
