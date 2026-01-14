@@ -299,9 +299,20 @@ def main():
         print(f"  ├─ Excel report (alternate): ✓")
     
     # Save alert events to JSON
-    with open("raw_alerts.json", "w") as f:
-        json.dump(alert_events, f, indent=2)
-    print(f"  ├─ Raw alerts: ✓")
+    print(f"\n📝 Saving raw alerts ({len(alert_events)} alerts)...")
+    try:
+        with open("raw_alerts.json", "w") as f:
+            json.dump(alert_events, f, indent=2)
+        print(f"  ✓ raw_alerts.json saved successfully")
+    except Exception as e:
+        print(f"  ✗ Error saving raw_alerts.json: {e}")
+    
+    # Verify file exists
+    import os
+    if os.path.exists("raw_alerts.json"):
+        print(f"  ✓ File verified: raw_alerts.json exists ({os.path.getsize('raw_alerts.json')} bytes)")
+    else:
+        print(f"  ✗ File NOT found after save!")
     
     # Refresh main page
     main_driver.refresh()
