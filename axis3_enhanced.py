@@ -308,7 +308,6 @@ def main():
         print(f"  ✗ Error saving raw_alerts.json: {e}")
     
     # Verify file exists
-    import os
     if os.path.exists("raw_alerts.json"):
         print(f"  ✓ File verified: raw_alerts.json exists ({os.path.getsize('raw_alerts.json')} bytes)")
     else:
