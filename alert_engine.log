@@ -30,3 +30,15 @@
 2026-01-14 05:28:11,575 - AlertEngine - INFO - 
 ✅ Email digest completed at 2026-01-14T05:28:11.575197
 2026-01-14 05:28:11,575 - AlertEngine - INFO - ============================================================
+2026-01-14 05:53:12,114 - AlertEngine - INFO - ============================================================
+2026-01-14 05:53:12,114 - AlertEngine - INFO - 🔄 Starting Alert Engine Processing
+2026-01-14 05:53:12,114 - AlertEngine - INFO - ============================================================
+2026-01-14 05:53:12,114 - AlertEngine - ERROR - raw_alerts.json not found. Run health check first.
+2026-01-14 05:53:23,813 - AlertEngine - INFO - ============================================================
+2026-01-14 05:53:23,813 - AlertEngine - INFO - 📨 Sending Slack Notifications
+2026-01-14 05:53:23,813 - AlertEngine - INFO - ============================================================
+2026-01-14 05:53:23,813 - AlertEngine - WARNING - actionable_alerts.json not found
+2026-01-14 05:53:31,301 - AlertEngine - INFO - ============================================================
+2026-01-14 05:53:31,301 - AlertEngine - INFO - 🎫 Creating GitHub Issues from Actionable Alerts
+2026-01-14 05:53:31,301 - AlertEngine - INFO - ============================================================
+2026-01-14 05:53:31,301 - AlertEngine - WARNING - actionable_alerts.json not found. No tickets to create.

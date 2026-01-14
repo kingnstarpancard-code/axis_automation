@@ -53,8 +53,24 @@ def run_check(activity_url, check_id, report_data, alert_events, execution_id, d
     chrome_options.add_argument("--headless")
     chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
     
-    driver = webdriver.Chrome(options=chrome_options)
+    try:
+        # Try to use chromium from PATH (GitHub Actions)
+        driver = webdriver.Chrome(options=chrome_options)
+    except:
+        # Fallback to webdriver-manager
+        try:
+            from webdriver_manager.chrome import ChromeDriverManager
+            from selenium.webdriver.chrome.service import Service
+            driver = webdriver.Chrome(
+                service=Service(ChromeDriverManager().install()),
+                options=chrome_options
+            )
+        except Exception as e:
+            print(f"✗ Chrome driver error: {e}")
+            raise
+    
     driver.get(activity_url)
     
     wait = WebDriverWait(driver, 10)
