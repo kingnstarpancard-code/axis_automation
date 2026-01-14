@@ -89,6 +89,14 @@ jobs:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       continue-on-error: true
     
+    - name: Send email notifications
+      run: python send_daily_email.py
+      env:
+        EMAIL_USER: ${{ secrets.EMAIL_USER }}
+        EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+        RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+      continue-on-error: true
+    
     - name: Generate reports
       run: python generate_reports.py
       env:
@@ -113,33 +121,33 @@ jobs:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       continue-on-error: true
 
-  # Send daily summary email
-  send-email-digest:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'schedule'
-    
-    needs: health-check
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-    
-    - name: Install dependencies
-      run: |
-        pip install pyyaml
-    
-    - name: Send daily email digest
-      run: python send_daily_email.py
-      env:
-        EMAIL_USER: ${{ secrets.EMAIL_USER }}
-        EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-        RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
-      continue-on-error: true
+  # Send daily summary email (disabled - now integrated in main job)
+  # send-email-digest:
+  #   runs-on: ubuntu-latest
+  #   if: github.event_name == 'schedule'
+  #   
+  #   needs: health-check
+  #   
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v3
+  #   
+  #   - name: Set up Python
+  #     uses: actions/setup-python@v4
+  #     with:
+  #       python-version: '3.9'
+  #   
+  #   - name: Install dependencies
+  #     run: |
+  #       pip install pyyaml
+  #   
+  #   - name: Send daily email digest
+  #     run: python send_daily_email.py
+  #     env:
+  #       EMAIL_USER: ${{ secrets.EMAIL_USER }}
+  #       EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+  #       RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+  #     continue-on-error: true
 
   # Dashboard update job (disabled - kept for reference)
   # update-dashboard:
