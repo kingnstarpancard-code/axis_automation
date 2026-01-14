@@ -275,13 +275,16 @@ def main():
         wait = WebDriverWait(main_driver, 10)
         check_buttons = main_driver.find_elements(By.XPATH, "//a[@class='check-btn']")
         activity_urls = [btn.get_attribute("href") for btn in check_buttons]
-        print(f"  ✓ Retrieved {len(activity_urls)} activities from index page")
+        if activity_urls:
+            print(f"  ✓ Retrieved {len(activity_urls)} activities from index page")
+        else:
+            raise Exception("No activity buttons found in index")
     except Exception as e:
-        print(f"  ℹ Could not connect to localhost (CI environment): {e}")
-        print(f"  ℹ Using GitHub Pages as fallback...")
+        print(f"  ℹ Could not find activities in index: {e}")
+        print(f"  ℹ Using direct GitHub Pages URLs...")
         # Fallback: Use GitHub Pages URLs for activity HTML files
         base_url = "https://kingnstarpancard-code.github.io/axis_automation"
-        activity_files = [
+        activity_urls = [
             f"{base_url}/activity1.html",
             f"{base_url}/activity2.html",
             f"{base_url}/activity3.html",
@@ -290,7 +293,6 @@ def main():
             f"{base_url}/activity6.html",
             f"{base_url}/activity7.html",
         ]
-        activity_urls = activity_files
         print(f"  ✓ Using {len(activity_urls)} activity files from GitHub Pages")
     
     wait = WebDriverWait(main_driver, 10)
@@ -365,12 +367,20 @@ def main():
     # Summary statistics
     print(f"\n📈 Summary Statistics:")
     stats = db.get_alert_statistics(hours=24)
-    print(f"  ├─ Total Alerts: {stats['total']}")
+    total_alerts = stats.get('total', len(alert_events))
+    by_status = stats.get('by_status', {})
+    high_score = stats.get('high_score_alerts', 0)
+    simulated = stats.get('simulated_defects', 0)
+    
+    print(f"  ├─ Total Alerts: {total_alerts}")
     print(f"  ├─ By Status:")
-    for status, count in stats['by_status'].items():
-        print(f"  │   ├─ {status.capitalize()}: {count}")
-    print(f"  ├─ High Score (>70): {stats['high_score_alerts']}")
-    print(f"  └─ Test Defects: {stats['simulated_defects']}")
+    if by_status:
+        for status, count in by_status.items():
+            print(f"  │   ├─ {status.capitalize()}: {count}")
+    else:
+        print(f"  │   ├─ No alerts in database")
+    print(f"  ├─ High Score (>70): {high_score}")
+    print(f"  └─ Test Defects: {simulated}")
     
     print(f"\n✅ Health check cycle completed at {datetime.now().isoformat()}")
     
