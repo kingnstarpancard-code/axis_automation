@@ -265,15 +265,36 @@ def main():
             raise
     
     main_driver.maximize_window()
-    main_driver.get("http://127.0.0.1:5502/nvsbank/index.html")
-    
-    wait = WebDriverWait(main_driver, 10)
     
     print(f"\n🔍 Discovering activities...")
     
-    # Get activity URLs
-    check_buttons = main_driver.find_elements(By.XPATH, "//a[@class='check-btn']")
-    activity_urls = [btn.get_attribute("href") for btn in check_buttons]
+    # Try to get activity URLs from index page, fallback to hardcoded list if CI environment
+    activity_urls = []
+    try:
+        main_driver.get("http://127.0.0.1:5502/nvsbank/index.html")
+        wait = WebDriverWait(main_driver, 10)
+        check_buttons = main_driver.find_elements(By.XPATH, "//a[@class='check-btn']")
+        activity_urls = [btn.get_attribute("href") for btn in check_buttons]
+        print(f"  ✓ Retrieved {len(activity_urls)} activities from index page")
+    except Exception as e:
+        print(f"  ℹ Could not connect to localhost (CI environment): {e}")
+        print(f"  ℹ Using hardcoded activity paths as fallback...")
+        # Fallback: Use file:// URLs for activity HTML files
+        import os
+        base_path = os.path.dirname(os.path.abspath(__file__))
+        activity_files = [
+            f"file://{os.path.join(base_path, 'activity1.html')}",
+            f"file://{os.path.join(base_path, 'activity2.html')}",
+            f"file://{os.path.join(base_path, 'activity3.html')}",
+            f"file://{os.path.join(base_path, 'activity4.html')}",
+            f"file://{os.path.join(base_path, 'activity5.html')}",
+            f"file://{os.path.join(base_path, 'activity6.html')}",
+            f"file://{os.path.join(base_path, 'activity7.html')}",
+        ]
+        activity_urls = activity_files
+        print(f"  ✓ Using {len(activity_urls)} activity files from filesystem")
+    
+    wait = WebDriverWait(main_driver, 10)
     
     print(f"  ├─ Found {len(activity_urls)} activities")
     
