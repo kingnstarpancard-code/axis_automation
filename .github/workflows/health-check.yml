@@ -2,8 +2,8 @@ name: 24x7 Health Check - Automated Monitoring
 
 on:
   schedule:
-    # Run every 30 minutes
-    - cron: '*/30 * * * *'
+    # Run every 10 minutes
+    - cron: '*/10 * * * *'
   
   # Allow manual trigger from GitHub UI
   workflow_dispatch:
