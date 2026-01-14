@@ -93,14 +93,12 @@ jobs:
     
     - name: Slack notification - Job Status
       if: always()
-      uses: 8398a7/action-slack@v3
-      with:
-        status: ${{ job.status }}
-        webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-        text: |
-          Health Check Job: ${{ job.status }}
-          Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        fields: repo,message,commit,author,action
+      run: |
+        if [ "${{ secrets.SLACK_WEBHOOK_URL }}" != "" ]; then
+          python send_slack_notifications.py
+        fi
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       continue-on-error: true
 
   # Send daily summary email
@@ -131,52 +129,27 @@ jobs:
         RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
       continue-on-error: true
 
-  # Dashboard update job
-  update-dashboard:
-    runs-on: ubuntu-latest
-    if: always()
-    
-    needs: health-check
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    
-    - name: Update dashboard data
-      run: |
-        # Update dashboard with latest run results
-        echo "Dashboard data would be updated here"
-    
-    - name: Commit and push dashboard
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add dashboard_data.json || true
-        git commit -m "Update dashboard - Run ${{ github.run_id }}" || true
-        git push || true
-      continue-on-error: true
+  # Dashboard update job (disabled - kept for reference)
+  # update-dashboard:
+  #   runs-on: ubuntu-latest
+  #   if: always()
+  #   needs: health-check
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+  #     - name: Update dashboard data
+  #       run: echo "Dashboard data would be updated here"
 
-# Scheduled cleanup job
-  cleanup:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'schedule'
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-    
-    - name: Clean up old artifacts
-      run: |
-        # Keep only last 30 days of data
-        python -c "
-        from database import AlertDatabase
-        db = AlertDatabase()
-        db.cleanup_old_records(days=30)
-        print('✓ Cleanup completed')
-        "
-      continue-on-error: true
+# Scheduled cleanup job (disabled - kept for reference)
+# cleanup:
+#   runs-on: ubuntu-latest
+#   if: github.event_name == 'schedule'
+#   steps:
+#     - name: Checkout code
+#       uses: actions/checkout@v3
+#     - name: Set up Python
+#       uses: actions/setup-python@v4
+#       with:
+#         python-version: '3.9'
+#     - name: Clean up old artifacts
+#       run: echo "Cleanup would run here"
