@@ -59,6 +59,14 @@ jobs:
         EXECUTION_ID: ${{ github.run_id }}_${{ github.run_number }}
       continue-on-error: true
     
+    - name: Debug - Check generated files
+      run: |
+        echo "Files in project:"
+        ls -la *.json *.xlsx 2>/dev/null || echo "No files found"
+        echo ""
+        echo "Alert database content:"
+        cat alert_database.json 2>/dev/null | head -20 || echo "No alert_database.json"
+    
     - name: Process alerts (Alert Engine)
       run: python process_alerts.py
       env:
