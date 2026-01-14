@@ -30,6 +30,12 @@ jobs:
       with:
         python-version: '3.9'
     
+    - name: Install Chrome and ChromeDriver
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y chromium-browser chromium-browser-l10n
+        sudo apt-get install -y chromium-chromedriver
+    
     - name: Cache dependencies
       uses: actions/cache@v3
       with:
@@ -51,6 +57,7 @@ jobs:
       env:
         DEFECTS_ENABLED: ${{ github.event.inputs.defects_enabled || 'true' }}
         EXECUTION_ID: ${{ github.run_id }}_${{ github.run_number }}
+      continue-on-error: true
     
     - name: Process alerts (Alert Engine)
       run: python process_alerts.py
@@ -65,7 +72,7 @@ jobs:
         GITHUB_REPO_NAME: ${{ github.event.repository.name }}
     
     - name: Send Slack notifications
-      if: env.SLACK_WEBHOOK_URL != ''
+      if: secrets.SLACK_WEBHOOK_URL != ''
       run: python send_slack_notifications.py
       env:
         SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -92,6 +99,7 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./reports
         destination_dir: ${{ github.run_id }}
+        allow_empty_commit: true
       continue-on-error: true
     
     - name: Slack notification - Job Status
