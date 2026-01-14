@@ -268,31 +268,30 @@ def main():
     
     print(f"\n🔍 Discovering activities...")
     
-    # Try to get activity URLs from index page, fallback to hardcoded list if CI environment
+    # Try to get activity URLs from index page, fallback to GitHub Pages if CI environment
     activity_urls = []
     try:
-        main_driver.get("http://127.0.0.1:5502/nvsbank/index.html")
+        main_driver.get("https://kingnstarpancard-code.github.io/axis_automation/")
         wait = WebDriverWait(main_driver, 10)
         check_buttons = main_driver.find_elements(By.XPATH, "//a[@class='check-btn']")
         activity_urls = [btn.get_attribute("href") for btn in check_buttons]
         print(f"  ✓ Retrieved {len(activity_urls)} activities from index page")
     except Exception as e:
         print(f"  ℹ Could not connect to localhost (CI environment): {e}")
-        print(f"  ℹ Using hardcoded activity paths as fallback...")
-        # Fallback: Use file:// URLs for activity HTML files
-        import os
-        base_path = os.path.dirname(os.path.abspath(__file__))
+        print(f"  ℹ Using GitHub Pages as fallback...")
+        # Fallback: Use GitHub Pages URLs for activity HTML files
+        base_url = "https://kingnstarpancard-code.github.io/axis_automation"
         activity_files = [
-            f"file://{os.path.join(base_path, 'activity1.html')}",
-            f"file://{os.path.join(base_path, 'activity2.html')}",
-            f"file://{os.path.join(base_path, 'activity3.html')}",
-            f"file://{os.path.join(base_path, 'activity4.html')}",
-            f"file://{os.path.join(base_path, 'activity5.html')}",
-            f"file://{os.path.join(base_path, 'activity6.html')}",
-            f"file://{os.path.join(base_path, 'activity7.html')}",
+            f"{base_url}/activity1.html",
+            f"{base_url}/activity2.html",
+            f"{base_url}/activity3.html",
+            f"{base_url}/activity4.html",
+            f"{base_url}/activity5.html",
+            f"{base_url}/activity6.html",
+            f"{base_url}/activity7.html",
         ]
         activity_urls = activity_files
-        print(f"  ✓ Using {len(activity_urls)} activity files from filesystem")
+        print(f"  ✓ Using {len(activity_urls)} activity files from GitHub Pages")
     
     wait = WebDriverWait(main_driver, 10)
     
