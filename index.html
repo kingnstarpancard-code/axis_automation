@@ -13,14 +13,14 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e40af 0%, #0369a1 100%);
             color: #333;
             min-height: 100vh;
         }
 
         /* Header/Navbar */
         .navbar {
-            background: linear-gradient(135deg, #2d3561 0%, #2d3561 100%);
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
             color: white;
             padding: 15px 30px;
             display: flex;
@@ -41,7 +41,7 @@
         }
 
         .navbar .logo::before {
-            content: "🏦";
+            content: "💊";
             font-size: 32px;
         }
 
@@ -66,13 +66,13 @@
         }
 
         .navbar .dashboard-link {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
             color: white;
         }
 
         .navbar .dashboard-link:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+            box-shadow: 0 5px 15px rgba(6, 182, 212, 0.4);
         }
 
         .navbar .logout-link {
@@ -110,7 +110,7 @@
             font-size: 24px;
             cursor: pointer;
             margin: 0 20px 25px 20px;
-            color: #667eea;
+            color: #0369a1;
             transition: transform 0.3s ease;
         }
 
@@ -138,8 +138,8 @@
 
         .sidebar a:hover {
             background-color: #f0f4ff;
-            border-left-color: #667eea;
-            color: #667eea;
+            border-left-color: #0369a1;
+            color: #0369a1;
         }
 
         .sidebar.collapsed a .text {
@@ -156,7 +156,7 @@
             flex: 1;
             padding: 30px;
             overflow-y: auto;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
         }
 
         .page-header {
@@ -172,7 +172,7 @@
 
         .page-header h1 {
             font-size: 28px;
-            color: #2d3561;
+            color: #1e3a8a;
             margin: 0;
         }
 
@@ -180,16 +180,16 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             padding: 10px 20px;
             border-radius: 30px;
             font-weight: 600;
             color: white;
-            box-shadow: 0 4px 15px rgba(132, 250, 176, 0.3);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
 
         .status-badge.warning {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
         }
 
         .status-badge.critical {
@@ -220,7 +220,7 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            border-left: 4px solid #667eea;
+            border-left: 4px solid #0369a1;
             transition: all 0.3s ease;
         }
 
@@ -252,7 +252,7 @@
         .stat-card .number {
             font-size: 32px;
             font-weight: bold;
-            color: #2d3561;
+            color: #1e3a8a;
         }
 
         /* Activity Cards Grid */
@@ -283,11 +283,11 @@
         .activity-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            border-color: #667eea;
+            border-color: #0369a1;
         }
 
         .activity-card-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
             padding: 20px;
             color: white;
             display: flex;
@@ -351,7 +351,7 @@
 
         .check-btn {
             flex: 1;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
             color: white;
             border: none;
             padding: 12px 20px;
@@ -370,7 +370,7 @@
 
         .check-btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 5px 15px rgba(3, 105, 161, 0.4);
         }
 
         .check-btn:disabled {
@@ -392,11 +392,11 @@
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo">Sahil Bank</div>
+        <div class="logo">Sahil Pharma</div>
         <div class="menu">
             <a href="#">Home</a>
-            <a href="#">Accounts</a>
-            <a href="#">Loans</a>
+            <a href="#">Products</a>
+            <a href="#">Inventory</a>
             <a href="#">Support</a>
             <a href="manager_dashboard.html" class="dashboard-link">📊 Manager Dashboard</a>
             <a href="#" onclick="logout()" class="logout-link">🚪 Logout</a>
@@ -408,7 +408,7 @@
             <button class="toggle-btn" onclick="toggleSidebar()" title="Toggle Sidebar">☰</button>
             <ul>
                 <li><a href="#"><span class="text">📊 Dashboard</span></a></li>
-                <li><a href="#"><span class="text">✓ Check Activity</span></a></li>
+                <li><a href="#"><span class="text">✓ Quality Check</span></a></li>
                 <li><a href="#"><span class="text">📈 Reports</span></a></li>
                 <li><a href="#"><span class="text">⚙️ Settings</span></a></li>
             </ul>
@@ -416,7 +416,7 @@
 
         <div class="content">
             <div class="page-header">
-                <h1>Health Monitoring Dashboard</h1>
+                <h1>Pharmaceutical Quality Monitoring</h1>
                 <div id="status-badge" class="status-badge">
                     ● All Systems Operational
                 </div>
@@ -425,7 +425,7 @@
             <!-- Stats Grid -->
             <div class="stats-grid">
                 <div class="stat-card success">
-                    <h3>Healthy Activities</h3>
+                    <h3>Verified Batches</h3>
                     <div class="number" id="healthy-count">7</div>
                 </div>
                 <div class="stat-card warning">
@@ -433,7 +433,7 @@
                     <div class="number" id="last-check">--:--</div>
                 </div>
                 <div class="stat-card">
-                    <h3>Total Checks</h3>
+                    <h3>Total Batches</h3>
                     <div class="number" id="total-checks">0</div>
                 </div>
                 <div class="stat-card critical">
@@ -444,7 +444,7 @@
 
             <!-- Activities Section -->
             <div class="activities-section">
-                <h2>🔍 Activities to Monitor</h2>
+                <h2>🔬 Quality Assurance Checks</h2>
                 <div class="cards-grid" id="cards-section">
                     <!-- Cards will be generated here -->
                 </div>
@@ -456,51 +456,51 @@
         const activities = [
             {
                 id: 1,
-                name: "Account Verification",
-                icon: "👤",
-                description: "Verify customer account details for compliance and security.",
+                name: "Raw Material Verification",
+                icon: "📦",
+                description: "Verify raw material certificates and batch numbers for quality compliance.",
                 url: "activity1.html"
             },
             {
                 id: 2,
-                name: "Transaction Review",
-                icon: "💳",
-                description: "Review recent transactions for suspicious activity patterns.",
+                name: "Manufacturing Process Review",
+                icon: "🏭",
+                description: "Review manufacturing procedures and equipment calibration records.",
                 url: "activity2.html"
             },
             {
                 id: 3,
-                name: "Loan Application Check",
-                icon: "📋",
-                description: "Assess loan application documents for accuracy and completeness.",
+                name: "Batch Testing Analysis",
+                icon: "🧪",
+                description: "Analyze batch test results and specifications for regulatory compliance.",
                 url: "activity3.html"
             },
             {
                 id: 4,
-                name: "Compliance Audit",
-                icon: "✅",
-                description: "Perform audit on regulatory compliance requirements.",
+                name: "Packaging Inspection",
+                icon: "📋",
+                description: "Inspect packaging integrity and labeling accuracy.",
                 url: "activity4.html"
             },
             {
                 id: 5,
-                name: "Customer Feedback",
-                icon: "📞",
-                description: "Analyze customer feedback for service improvements.",
+                name: "Stability Testing",
+                icon: "⏱️",
+                description: "Monitor stability testing data and temperature controlled storage conditions.",
                 url: "activity5.html"
             },
             {
                 id: 6,
-                name: "Security Scan",
-                icon: "🔐",
-                description: "Update security protocols and verify implementation status.",
+                name: "GMP Compliance Audit",
+                icon: "✅",
+                description: "Perform Good Manufacturing Practice compliance audit and documentation review.",
                 url: "activity6.html"
             },
             {
                 id: 7,
-                name: "Performance Metrics",
+                name: "Quality Control Report",
                 icon: "📊",
-                description: "Monitor system performance and metrics.",
+                description: "Generate and verify quality control reports and certificates of analysis.",
                 url: "activity7.html"
             }
         ];
