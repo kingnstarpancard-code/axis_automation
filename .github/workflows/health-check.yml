@@ -91,16 +91,6 @@ jobs:
           alert_report.json
           ticket_summary.json
     
-    - name: Publish to GitHub Pages
-      if: always()
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./reports
-        destination_dir: ${{ github.run_id }}
-        allow_empty_commit: true
-      continue-on-error: true
-    
     - name: Slack notification - Job Status
       if: always()
       uses: 8398a7/action-slack@v3
