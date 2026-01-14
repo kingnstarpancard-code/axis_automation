@@ -238,7 +238,32 @@ def main():
     print(f"  ├─ Defect Types: {', '.join(stats['defect_types'][:3])}...")
     
     # Open main page
-    main_driver = webdriver.Chrome()
+    print(f"\n📍 Initializing Chrome driver...")
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
+    
+    try:
+        # Try system chromium first
+        main_driver = webdriver.Chrome(options=chrome_options)
+        print(f"  ✓ Using system Chrome")
+    except:
+        # Fallback to webdriver-manager
+        try:
+            from webdriver_manager.chrome import ChromeDriverManager
+            from selenium.webdriver.chrome.service import Service
+            print(f"  ℹ System Chrome not found, using webdriver-manager")
+            main_driver = webdriver.Chrome(
+                service=Service(ChromeDriverManager().install()),
+                options=chrome_options
+            )
+            print(f"  ✓ Using managed ChromeDriver")
+        except Exception as e:
+            print(f"  ✗ Chrome initialization failed: {e}")
+            raise
+    
     main_driver.maximize_window()
     main_driver.get("http://127.0.0.1:5502/nvsbank/index.html")
     
