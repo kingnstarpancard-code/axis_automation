@@ -1,0 +1,26 @@
+[
+  {
+    "execution_id": "test-exec-001",
+    "timestamp": "2026-02-09T18:07:36.798384",
+    "status": "success",
+    "total_checks": 7,
+    "success_count": 6,
+    "failure_count": 1,
+    "simulated_defects": 2,
+    "report_file": "test_report.xlsx",
+    "alerts_file": "test_alerts.json",
+    "duration_seconds": 45.32
+  },
+  {
+    "execution_id": "test-exec-001",
+    "timestamp": "2026-02-09T18:08:38.312247",
+    "status": "success",
+    "total_checks": 7,
+    "success_count": 6,
+    "failure_count": 1,
+    "simulated_defects": 2,
+    "report_file": "test_report.xlsx",
+    "alerts_file": "test_alerts.json",
+    "duration_seconds": 45.32
+  }
+]

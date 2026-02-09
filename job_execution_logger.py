@@ -106,12 +106,20 @@ class JobExecutionLogger:
                 'success_rate': 0,
                 'last_execution': None,
                 'total_checks': 0,
-                'average_checks_per_run': 0
+                'average_checks_per_run': 0,
+                'total_successful_checks': 0,
+                'total_failed_checks': 0,
+                'total_defects_simulated': 0,
+                'average_duration_seconds': 0
             }
         
         successful = sum(1 for e in executions if e.get('status') == 'success')
         failed = sum(1 for e in executions if e.get('status') == 'failed')
         total_checks = sum(e.get('total_checks', 0) for e in executions)
+        total_successful_checks = sum(e.get('success_count', 0) for e in executions)
+        total_failed_checks = sum(e.get('failure_count', 0) for e in executions)
+        total_defects = sum(e.get('simulated_defects', 0) for e in executions)
+        total_duration = sum(e.get('duration_seconds', 0) for e in executions)
         
         return {
             'total_executions': len(executions),
@@ -120,7 +128,11 @@ class JobExecutionLogger:
             'success_rate': (successful / len(executions) * 100) if executions else 0,
             'last_execution': executions[-1].get('timestamp'),
             'total_checks': total_checks,
-            'average_checks_per_run': total_checks / len(executions) if executions else 0
+            'average_checks_per_run': total_checks / len(executions) if executions else 0,
+            'total_successful_checks': total_successful_checks,
+            'total_failed_checks': total_failed_checks,
+            'total_defects_simulated': total_defects,
+            'average_duration_seconds': total_duration / len(executions) if executions else 0
         }
 
 
