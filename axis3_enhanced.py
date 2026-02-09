@@ -22,6 +22,7 @@ from selenium.webdriver.common.by import By
 
 from defect_injector import DefectInjector, DefectConfiguration
 from database import AlertDatabase
+from job_execution_logger import JobExecutionLogger
 
 
 def check_link(url):
@@ -228,6 +229,10 @@ def main():
     print(f"  ├─ Defects Enabled: {'✓ Yes' if defects_enabled else '✗ No'}")
     print(f"  └─ Start Time: {datetime.now().isoformat()}")
     
+    # Initialize execution tracking
+    execution_id = str(uuid.uuid4())
+    start_time = time.time()
+    
     # Initialize components
     defect_injector = DefectInjector(enabled=defects_enabled)
     db = AlertDatabase()
@@ -383,6 +388,27 @@ def main():
     print(f"  └─ Test Defects: {simulated}")
     
     print(f"\n✅ Health check cycle completed at {datetime.now().isoformat()}")
+    
+    # Log this execution to job history
+    job_logger = JobExecutionLogger()
+    execution_summary = {
+        "execution_id": execution_id,
+        "timestamp": datetime.now().isoformat(),
+        "status": "success",
+        "total_checks": len(activity_urls),
+        "total_alerts": len(alert_events),
+        "success_count": sum(1 for a in alert_events if a.get('status') == 'success'),
+        "failure_count": sum(1 for a in alert_events if a.get('status') == 'failure'),
+        "simulated_defects": sum(1 for a in alert_events if a.get('is_simulated', False)),
+        "report_file": "link_check_report.xlsx",
+        "alerts_file": "raw_alerts.json",
+        "duration_seconds": time.time() - start_time if 'start_time' in locals() else 0
+    }
+    
+    if job_logger.log_execution(execution_summary):
+        print(f"📊 Job logged to dashboard: {execution_summary['execution_id']}")
+    else:
+        print(f"⚠️  Failed to log execution to dashboard")
     
     input("Press Enter to exit...")
     main_driver.quit()
