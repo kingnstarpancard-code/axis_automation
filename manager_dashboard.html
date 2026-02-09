@@ -267,6 +267,57 @@
             transform: translateY(0);
         }
 
+        .download-btn {
+            display: inline-block;
+            padding: 6px 10px;
+            margin: 2px;
+            background: #1F4788;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .download-btn:hover {
+            background: #2B5BAF;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(31, 71, 136, 0.3);
+        }
+
+        .download-btn.excel {
+            background: #00A86B;
+        }
+
+        .download-btn.excel:hover {
+            background: #008C4C;
+        }
+
+        .download-btn.screenshot {
+            background: #FFB81C;
+            color: #333;
+        }
+
+        .download-btn.screenshot:hover {
+            background: #E6A600;
+            color: #000;
+        }
+
+        .download-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .downloads-cell {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: center;
+        }
+
         h2 {
             clear: both;
         }
@@ -348,6 +399,7 @@
                             <th>Failed</th>
                             <th>Test Defects</th>
                             <th>Duration (s)</th>
+                            <th>Downloads</th>
                             <th>Details</th>
                         </tr>
                     </thead>
@@ -519,6 +571,49 @@
                 durationCell.textContent = (execution.duration_seconds || 0).toFixed(2);
                 durationCell.style.textAlign = 'right';
 
+                const downloadsCell = document.createElement('td');
+                downloadsCell.className = 'downloads-cell';
+                
+                // Excel download button
+                if (execution.report_file) {
+                    const excelBtn = document.createElement('button');
+                    excelBtn.className = 'download-btn excel';
+                    excelBtn.textContent = '📊 Excel';
+                    excelBtn.title = execution.report_file;
+                    excelBtn.onclick = (e) => {
+                        e.preventDefault();
+                        downloadFile(execution.report_file, 'excel', execution.execution_id);
+                    };
+                    downloadsCell.appendChild(excelBtn);
+                }
+                
+                // Screenshots download button
+                if (execution.total_checks) {
+                    const screenshotBtn = document.createElement('button');
+                    screenshotBtn.className = 'download-btn screenshot';
+                    screenshotBtn.textContent = '🖼️ Screenshots';
+                    screenshotBtn.title = `${execution.total_checks} screenshots`;
+                    screenshotBtn.onclick = (e) => {
+                        e.preventDefault();
+                        downloadScreenshots(execution.execution_id, execution.total_checks);
+                    };
+                    downloadsCell.appendChild(screenshotBtn);
+                }
+                
+                // Alerts/JSON download button
+                if (execution.alerts_file) {
+                    const alertsBtn = document.createElement('button');
+                    alertsBtn.className = 'download-btn';
+                    alertsBtn.style.background = '#E91E63';
+                    alertsBtn.textContent = '⚠️ Alerts';
+                    alertsBtn.title = execution.alerts_file;
+                    alertsBtn.onclick = (e) => {
+                        e.preventDefault();
+                        downloadFile(execution.alerts_file, 'json', execution.execution_id);
+                    };
+                    downloadsCell.appendChild(alertsBtn);
+                }
+
                 const detailsCell = document.createElement('td');
                 const detailsBtn = document.createElement('a');
                 detailsBtn.href = '#';
@@ -548,6 +643,7 @@
                 tr.appendChild(failureCountCell);
                 tr.appendChild(defectsCell);
                 tr.appendChild(durationCell);
+                tr.appendChild(downloadsCell);
                 tr.appendChild(detailsCell);
 
                 tbody.appendChild(tr);
@@ -652,6 +748,141 @@ Duration:  ${execution.duration_seconds.toFixed(2)} seconds
         window.onload = () => {
             loadExecutionHistory();
         };
+
+        // Download file function
+        function downloadFile(filename, fileType, executionId) {
+            // Check if file exists locally
+            if (fileType === 'excel') {
+                fetch(filename)
+                    .then(response => {
+                        if (!response.ok) {
+                            alert(`Excel file not found: ${filename}\n\nFiles are stored locally in the project directory.\n\nExecution ID: ${executionId}`);
+                            return;
+                        }
+                        return response.blob();
+                    })
+                    .then(blob => {
+                        if (blob) {
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `${executionId}_${filename}`;
+                            document.body.appendChild(a);
+                            a.click();
+                            window.URL.revokeObjectURL(url);
+                            document.body.removeChild(a);
+                            console.log(`✅ Downloaded: ${filename}`);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Download error:', error);
+                        showFileInfo(filename, fileType, executionId);
+                    });
+            } else if (fileType === 'json') {
+                fetch(filename)
+                    .then(response => {
+                        if (!response.ok) throw new Error('File not found');
+                        return response.json();
+                    })
+                    .then(data => {
+                        const dataStr = JSON.stringify(data, null, 2);
+                        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+                        const url = window.URL.createObjectURL(dataBlob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = `${executionId}_alerts.json`;
+                        document.body.appendChild(a);
+                        a.click();
+                        window.URL.revokeObjectURL(url);
+                        document.body.removeChild(a);
+                        console.log(`✅ Downloaded: ${filename}`);
+                    })
+                    .catch(error => {
+                        console.error('Download error:', error);
+                        showFileInfo(filename, fileType, executionId);
+                    });
+            }
+        }
+
+        // Download all screenshots for an execution
+        function downloadScreenshots(executionId, totalChecks) {
+            const screenshotFiles = [];
+            
+            // Collect screenshot file paths (1-7 for banking checks)
+            for (let i = 1; i <= totalChecks; i++) {
+                screenshotFiles.push(`screenshots/screenshot_${i}.png`);
+            }
+            
+            if (screenshotFiles.length === 0) {
+                alert('No screenshots available for this execution');
+                return;
+            }
+            
+            // Show download info
+            const screenshotInfo = `
+📸 Screenshots Download Information
+═══════════════════════════════════════════
+
+Execution ID: ${executionId}
+Total Screenshots: ${screenshotFiles.length}
+
+Available Screenshots:
+${screenshotFiles.map((f, i) => `  ${i + 1}. ${f}`).join('\n')}
+
+Instructions:
+1. Right-click on each screenshot filename below
+2. Select "Save image as..." to download
+3. Or access directly in screenshots/ folder
+
+Local File Paths (if running locally):
+${screenshotFiles.map(f => `  - ${f}`).join('\n')}
+
+GitHub Pages Note:
+Screenshots are stored in the project repository.
+You can access them at:
+https://github.com/kingnstarpancard-code/axis_automation/tree/master/screenshots
+            `;
+            
+            alert(screenshotInfo);
+            
+            // Try to open screenshots folder
+            console.log('📸 Screenshots for execution:', executionId);
+            console.log('Files:', screenshotFiles);
+        }
+
+        // Show file information
+        function showFileInfo(filename, fileType, executionId) {
+            const fileTypeLabel = fileType === 'excel' ? '📊 Excel Report' : '⚠️ Alerts JSON';
+            
+            const info = `
+${fileTypeLabel} Download Information
+═══════════════════════════════════════════
+
+Execution ID: ${executionId}
+Filename: ${filename}
+
+Instructions:
+1. This file is stored on your local system
+2. Check the project directory for: ${filename}
+3. Or run the automation script again to regenerate
+
+If running locally:
+✓ File path: ${filename}
+✓ Located in: project root directory
+
+If using GitHub Pages:
+✓ Files are generated during automation
+✓ Download them from your local machine
+✓ Or check GitHub repo releases section
+
+File Details:
+• Type: ${fileType === 'excel' ? 'Microsoft Excel (.xlsx)' : 'JSON Data (.json)'}
+• Generated: During job execution
+• Contains: ${fileType === 'excel' ? 'Verification report data' : 'Alert events data'}
+            `;
+            
+            alert(info);
+        }
     </script>
 </body>
 </html>
