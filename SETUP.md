@@ -59,7 +59,7 @@ python axis3_enhanced.py
 ```bash
 # 1. Clone and setup
 git clone <your-repo>
-cd sahil_automation_project
+cd amxis_automation_project
 
 # 2. Install dependencies
 pip install -r requirements.txt
@@ -316,7 +316,7 @@ Or manually: Actions → Workflows → Health Check → "Run workflow"
 
 **GitHub Issues:**
 ```
-https://github.com/your-username/sahil_automation_project/issues
+https://github.com/your-username/amxis_automation_project/issues
 ```
 
 **Slack Channels:**

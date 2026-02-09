@@ -3,18 +3,34 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Manager Dashboard - NVS L1.5</title>
+    <title>Manager Dashboard - Amxis Bank</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1F4788 0%, #0F3A5F 100%);
             margin: 0;
             padding: 20px;
             color: #333;
+            min-height: 100vh;
         }
         h1 {
-            color: #6366F1;
+            color: white;
             text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        p {
+            text-align: center;
+            color: #E8EEF5;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
         table {
             width: 100%;
@@ -22,47 +38,61 @@
             margin-top: 20px;
         }
         table, th, td {
-            border: 1px solid #ddd;
+            border: 1px solid #DDD;
         }
         th, td {
-            padding: 10px;
+            padding: 12px;
             text-align: left;
         }
         th {
-            background-color: #6366F1;
+            background: linear-gradient(135deg, #1F4788 0%, #2B5BAF 100%);
             color: white;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background-color: #F5F7FA;
+        }
+        tr:hover {
+            background-color: #EDF2F7;
         }
         .error {
-            color: red;
+            color: #E91E63;
             font-weight: bold;
         }
         img.screenshot {
             max-width: 150px;
             max-height: 100px;
-            border: 1px solid #ccc;
+            border: 2px solid #1F4788;
             border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        img.screenshot:hover {
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
-    <h1>Manager Dashboard - Verification Report</h1>
-    <p>This dashboard shows the verification status of checked activities including screenshots, status codes, and errors.</p>
-    <table id="reportTable">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Site Name</th>
-                <th>Response Code</th>
-                <th>Status</th>
-                <th>Reason/Error</th>
-                <th>Radio Choice</th>
-                <th>Screenshot</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Rows will be populated here by JavaScript -->
-        </tbody>
-    </table>
+    <h1>🏦 Manager Dashboard - Verification Report</h1>
+    <p>Amxis Bank - System Health Monitoring and Verification Status</p>
+    <div class="container">
+        <table id="reportTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>System Name</th>
+                    <th>Response Code</th>
+                    <th>Status</th>
+                    <th>Reason/Error</th>
+                    <th>Validation</th>
+                    <th>Screenshot</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Rows will be populated here by JavaScript -->
+            </tbody>
+        </table>
+    </div>
 
     <script>
         // Function to get report data from localStorage and populate the table

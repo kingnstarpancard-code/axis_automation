@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sahil Bank - Health Monitoring Dashboard</title>
+    <title>Amxis Bank - Health Monitoring Dashboard</title>
     <style>
         * {
             margin: 0;
@@ -13,20 +13,20 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e40af 0%, #0369a1 100%);
+            background: linear-gradient(135deg, #1F4788 0%, #0F3A5F 100%);
             color: #333;
             min-height: 100vh;
         }
 
         /* Header/Navbar */
         .navbar {
-            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            background: linear-gradient(135deg, #1F4788 0%, #2B5BAF 100%);
             color: white;
             padding: 15px 30px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -41,7 +41,7 @@
         }
 
         .navbar .logo::before {
-            content: "💊";
+            content: "🏦";
             font-size: 32px;
         }
 
@@ -66,21 +66,21 @@
         }
 
         .navbar .dashboard-link {
-            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            background: linear-gradient(135deg, #E91E63 0%, #C2185B 100%);
             color: white;
         }
 
         .navbar .dashboard-link:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(6, 182, 212, 0.4);
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.4);
         }
 
         .navbar .logout-link {
-            background-color: #ef4444;
+            background-color: #D32F2F;
         }
 
         .navbar .logout-link:hover {
-            background-color: #dc2626;
+            background-color: #B71C1C;
             transform: translateY(-2px);
         }
 
@@ -110,7 +110,7 @@
             font-size: 24px;
             cursor: pointer;
             margin: 0 20px 25px 20px;
-            color: #0369a1;
+            color: #1F4788;
             transition: transform 0.3s ease;
         }
 
@@ -138,8 +138,8 @@
 
         .sidebar a:hover {
             background-color: #f0f4ff;
-            border-left-color: #0369a1;
-            color: #0369a1;
+            border-left-color: #1F4788;
+            color: #1F4788;
         }
 
         .sidebar.collapsed a .text {
@@ -156,7 +156,7 @@
             flex: 1;
             padding: 30px;
             overflow-y: auto;
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            background: linear-gradient(135deg, #F5F7FA 0%, #E8EEF5 100%);
         }
 
         .page-header {
@@ -172,7 +172,7 @@
 
         .page-header h1 {
             font-size: 28px;
-            color: #1e3a8a;
+            color: #1F4788;
             margin: 0;
         }
 
@@ -220,7 +220,7 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-            border-left: 4px solid #0369a1;
+            border-left: 4px solid #1F4788;
             transition: all 0.3s ease;
         }
 
@@ -230,15 +230,15 @@
         }
 
         .stat-card.success {
-            border-left-color: #10b981;
+            border-left-color: #00A86B;
         }
 
         .stat-card.warning {
-            border-left-color: #f59e0b;
+            border-left-color: #FFB81C;
         }
 
         .stat-card.critical {
-            border-left-color: #ef4444;
+            border-left-color: #E91E63;
         }
 
         .stat-card h3 {
@@ -252,7 +252,7 @@
         .stat-card .number {
             font-size: 32px;
             font-weight: bold;
-            color: #1e3a8a;
+            color: #1F4788;
         }
 
         /* Activity Cards Grid */
@@ -287,7 +287,7 @@
         }
 
         .activity-card-header {
-            background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+            background: linear-gradient(135deg, #1F4788 0%, #2B5BAF 100%);
             padding: 20px;
             color: white;
             display: flex;
@@ -329,18 +329,18 @@
         }
 
         .status-indicator.healthy {
-            background: #d1fae5;
-            color: #065f46;
+            background: #C8E6C9;
+            color: #1B5E20;
         }
 
         .status-indicator.checking {
-            background: #fef3c7;
-            color: #92400e;
+            background: #FFE0B2;
+            color: #E65100;
         }
 
         .status-indicator.warning {
-            background: #fee2e2;
-            color: #991b1b;
+            background: #FFCDD2;
+            color: #B71C1C;
         }
 
         .activity-card-footer {
@@ -351,7 +351,7 @@
 
         .check-btn {
             flex: 1;
-            background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);
+            background: linear-gradient(135deg, #1F4788 0%, #2B5BAF 100%);
             color: white;
             border: none;
             padding: 12px 20px;
@@ -370,11 +370,11 @@
 
         .check-btn:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(3, 105, 161, 0.4);
+            box-shadow: 0 5px 15px rgba(31, 71, 136, 0.4);
         }
 
         .check-btn:disabled {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            background: linear-gradient(135deg, #00A86B 0%, #008C45 100%);
             cursor: not-allowed;
             opacity: 0.9;
         }
@@ -392,11 +392,11 @@
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo">Sahil Pharma</div>
+        <div class="logo">Amxis Bank</div>
         <div class="menu">
             <a href="#">Home</a>
-            <a href="#">Products</a>
-            <a href="#">Inventory</a>
+            <a href="#">Solutions</a>
+            <a href="#">Services</a>
             <a href="#">Support</a>
             <a href="manager_dashboard.html" class="dashboard-link">📊 Manager Dashboard</a>
             <a href="#" onclick="logout()" class="logout-link">🚪 Logout</a>
@@ -408,7 +408,7 @@
             <button class="toggle-btn" onclick="toggleSidebar()" title="Toggle Sidebar">☰</button>
             <ul>
                 <li><a href="#"><span class="text">📊 Dashboard</span></a></li>
-                <li><a href="#"><span class="text">✓ Quality Check</span></a></li>
+                <li><a href="#"><span class="text">✓ System Check</span></a></li>
                 <li><a href="#"><span class="text">📈 Reports</span></a></li>
                 <li><a href="#"><span class="text">⚙️ Settings</span></a></li>
             </ul>
@@ -416,7 +416,7 @@
 
         <div class="content">
             <div class="page-header">
-                <h1>Pharmaceutical Quality Monitoring</h1>
+                <h1>Banking System Health Monitoring</h1>
                 <div id="status-badge" class="status-badge">
                     ● All Systems Operational
                 </div>
@@ -425,7 +425,7 @@
             <!-- Stats Grid -->
             <div class="stats-grid">
                 <div class="stat-card success">
-                    <h3>Verified Batches</h3>
+                    <h3>Verified Systems</h3>
                     <div class="number" id="healthy-count">7</div>
                 </div>
                 <div class="stat-card warning">
@@ -433,7 +433,7 @@
                     <div class="number" id="last-check">--:--</div>
                 </div>
                 <div class="stat-card">
-                    <h3>Total Batches</h3>
+                    <h3>Total Systems</h3>
                     <div class="number" id="total-checks">0</div>
                 </div>
                 <div class="stat-card critical">
@@ -444,7 +444,7 @@
 
             <!-- Activities Section -->
             <div class="activities-section">
-                <h2>🔬 Quality Assurance Checks</h2>
+                <h2>� Critical System Checks</h2>
                 <div class="cards-grid" id="cards-section">
                     <!-- Cards will be generated here -->
                 </div>
@@ -456,51 +456,51 @@
         const activities = [
             {
                 id: 1,
-                name: "Raw Material Verification",
-                icon: "📦",
-                description: "Verify raw material certificates and batch numbers for quality compliance.",
+                name: "Customer Authentication",
+                icon: "�",
+                description: "Verify customer identity and authentication protocols for secure access.",
                 url: "activity1.html"
             },
             {
                 id: 2,
-                name: "Manufacturing Process Review",
-                icon: "🏭",
-                description: "Review manufacturing procedures and equipment calibration records.",
+                name: "Transaction Processing",
+                icon: "💳",
+                description: "Monitor transaction processing systems and payment gateway operations.",
                 url: "activity2.html"
             },
             {
                 id: 3,
-                name: "Batch Testing Analysis",
-                icon: "🧪",
-                description: "Analyze batch test results and specifications for regulatory compliance.",
+                name: "Account Management",
+                icon: "👤",
+                description: "Verify account management systems and customer data integrity.",
                 url: "activity3.html"
             },
             {
                 id: 4,
-                name: "Packaging Inspection",
-                icon: "📋",
-                description: "Inspect packaging integrity and labeling accuracy.",
+                name: "Fund Transfer Service",
+                icon: "�",
+                description: "Monitor fund transfer systems and inter-bank communication protocols.",
                 url: "activity4.html"
             },
             {
                 id: 5,
-                name: "Stability Testing",
-                icon: "⏱️",
-                description: "Monitor stability testing data and temperature controlled storage conditions.",
+                name: "Balance Inquiry",
+                icon: "📊",
+                description: "Verify real-time balance inquiry and account statement systems.",
                 url: "activity5.html"
             },
             {
                 id: 6,
-                name: "GMP Compliance Audit",
-                icon: "✅",
-                description: "Perform Good Manufacturing Practice compliance audit and documentation review.",
+                name: "Security Compliance",
+                icon: "🛡️",
+                description: "Perform security compliance audit and encryption protocol verification.",
                 url: "activity6.html"
             },
             {
                 id: 7,
-                name: "Quality Control Report",
-                icon: "📊",
-                description: "Generate and verify quality control reports and certificates of analysis.",
+                name: "System Availability",
+                icon: "✅",
+                description: "Monitor system availability and uptime metrics for critical services.",
                 url: "activity7.html"
             }
         ];

@@ -29,7 +29,7 @@ def main():
     logger.info(f"  └─ Dry Run: {'✓ Yes' if notifier.dry_run else '✗ No'}")
     
     # Get recipient email
-    recipient = os.getenv('RECIPIENT_EMAIL', 'admin@sahil-bank.local')
+    recipient = os.getenv('RECIPIENT_EMAIL', 'admin@amxis-bank.local')
     
     # Get 24-hour statistics
     logger.info(f"\n📊 Gathering statistics for last 24 hours...")

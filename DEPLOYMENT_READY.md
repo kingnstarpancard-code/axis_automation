@@ -220,7 +220,7 @@ Disable in production: DEFECTS_ENABLED=false
 
 ### GitHub
 ```
-Your Issues: github.com/your-username/sahil_automation_project/issues
+Your Issues: github.com/your-username/amxis_automation_project/issues
 ├─ Auto-created tickets
 ├─ Priority labels
 ├─ Full alert details
@@ -451,4 +451,4 @@ Everything is ready. All you need to do:
 *Implementation completed: January 13, 2026*  
 *Created by: GitHub Copilot*  
 *Version: 1.0.0*  
-*License: Part of Sahil Automation Project*
+*License: Part of Amxis Bank Automation Project*

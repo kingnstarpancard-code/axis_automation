@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NVS L1.5 Check Detail - Security Update</title>
+    <title>Amxis Bank - Security Compliance Verification</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,7 +16,7 @@
             height: 100vh;
         }
         .navbar {
-            background-color: #6366F1;
+            background-color: #1F4788;
             color: white;
             padding: 10px 20px;
             display: flex;
@@ -99,7 +99,7 @@
             padding: 20px;
         }
         .detail h2 {
-            color: #6366F1;
+            color: #1F4788;
             margin-bottom: 20px;
         }
         textarea {
@@ -167,11 +167,11 @@
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo">NVS L1.5</div>
+        <div class="logo">🏦 Amxis Bank</div>
         <div class="menu">
             <a href="index.html">Home</a>
-            <a href="#">Accounts</a>
-            <a href="#">Loans</a>
+            <a href="#">Services</a>
+            <a href="#">Products</a>
             <a href="#">Support</a>
         </div>
     </nav>
@@ -179,17 +179,17 @@
         <aside class="sidebar" id="sidebar">
             <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
             <ul>
-                <li><a href="index.html"><span class="text">Dashboard</span></a></li>
-                <li><a href="index.html"><span class="text">Check Activity</span></a></li>
-                <li><a href="#"><span class="text">Reports</span></a></li>
-                <li><a href="#"><span class="text">Settings</span></a></li>
+                <li><a href="index.html"><span class="text">📊 Dashboard</span></a></li>
+                <li><a href="index.html"><span class="text">✓ System Checks</span></a></li>
+                <li><a href="#"><span class="text">📈 Reports</span></a></li>
+                <li><a href="#"><span class="text">⚙️ Settings</span></a></li>
             </ul>
         </aside>
         <div class="content">
             <div class="container">
                 <div id="detail-section" class="detail">
-                    <h2>Security Update</h2>
-                    <textarea id="detail-text" readonly>This detailed description provides comprehensive information about security update. It includes specific guidelines, requirements, and steps to follow for accurate verification. Please ensure all criteria are met before selecting a status. For additional resources, refer to the https://www.owasp.org or contact the compliance team.</textarea>
+                    <h2>Security Compliance Verification</h2>
+                    <textarea id="detail-text" readonly>This compliance check verifies security protocols and encryption standards. Ensure data protection, SSL/TLS implementation, and vulnerability management. Reference: https://www.owasp.org</textarea>
                     <div class="upload-section">
                         <label for="screenshot">Upload Screenshot:</label>
                         <input type="file" id="screenshot" accept="image/*" onchange="checkScreenshot()">
@@ -197,23 +197,23 @@
                     <div class="status-options">
                         <div class="status-option">
                             <input type="radio" id="red" name="status" value="red">
-                            <label for="red">Red</label>
+                            <label for="red">Issue Found</label>
                         </div>
                         <div class="status-option">
                             <input type="radio" id="amber" name="status" value="amber">
-                            <label for="amber">Amber</label>
+                            <label for="amber">Partial Success</label>
                         </div>
                         <div class="status-option">
                             <input type="radio" id="green" name="status" value="green">
-                            <label for="green">Green</label>
+                            <label for="green">Healthy</label>
                         </div>
                     </div>
                     <div class="name-input">
-                        <label for="name">Your Name:</label>
+                        <label for="name">Verified By:</label>
                         <input type="text" id="name" placeholder="Enter your name">
                     </div>
-                    <button class="back-btn" onclick="window.location.href='index.html'">Back</button>
-                    <button class="submit-btn" onclick="submitCheck()">Submit</button>
+                    <button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
+                    <button class="submit-btn" onclick="submitCheck()">✓ Submit Verification</Submit</button>
                 </div>
             </div>
         </div>

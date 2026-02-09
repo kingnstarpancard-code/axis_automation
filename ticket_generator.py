@@ -22,7 +22,7 @@ class GitHubTicketGenerator:
         """
         self.github_token = github_token or os.getenv('GITHUB_TOKEN')
         self.repo_owner = os.getenv('GITHUB_REPO_OWNER', 'user')
-        self.repo_name = os.getenv('GITHUB_REPO_NAME', 'sahil_automation_project')
+        self.repo_name = os.getenv('GITHUB_REPO_NAME', 'amxis_automation_project')
         
         if not self.github_token:
             print("⚠️ Warning: GITHUB_TOKEN not set. Tickets will be created in dry-run mode")

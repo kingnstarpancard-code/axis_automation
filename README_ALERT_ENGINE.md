@@ -82,7 +82,7 @@ sahil_automation_project/
 │   └── process_alerts.py           # Alert processing script
 │
 ├── ⚙️ Configuration
-│   ├── alert_rules.yaml            # Alert rules for each activity
+│   ├── alert_rules.yaml            # Alert rules for each banking system
 │   ├── requirements.txt            # Python dependencies
 │   └── .github/workflows/
 │       └── health-check.yml        # GitHub Actions workflow
@@ -419,7 +419,7 @@ tail -n 1000 alert_engine.log > debug_logs.txt
 
 ## 📝 License
 
-This project is part of the Sahil Automation Project.
+This project is part of the Amxis Bank Automation Project.
 
 ---
 

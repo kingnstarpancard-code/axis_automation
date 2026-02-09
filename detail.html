@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NVS L1.5 Check Detail</title>
+    <title>Amxis Bank Check Detail</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1F4788 0%, #0F3A5F 100%);
             margin: 0;
             padding: 0;
             color: #333;
@@ -16,16 +16,20 @@
             height: 100vh;
         }
         .navbar {
-            background-color: #6366F1;
+            background: linear-gradient(135deg, #1F4788 0%, #2B5BAF 100%);
             color: white;
-            padding: 10px 20px;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
         .navbar .logo {
-            font-size: 24px;
+            font-size: 26px;
             font-weight: bold;
+        }
+        .navbar .logo::before {
+            content: "🏦 ";
         }
         .navbar .menu {
             display: flex;
@@ -34,11 +38,12 @@
         .navbar a {
             color: white;
             text-decoration: none;
-            padding: 5px 10px;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: all 0.3s;
         }
         .navbar a:hover {
-            background-color: #4F46E5;
-            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.2);
         }
         .main-content {
             display: flex;
@@ -46,11 +51,12 @@
         }
         .sidebar {
             width: 250px;
-            background-color: #fff;
-            border-right: 1px solid #ddd;
+            background-color: white;
+            border-right: 2px solid #E0E0E0;
             padding: 20px;
-            box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
             transition: width 0.3s;
+            overflow-y: auto;
         }
         .sidebar.collapsed {
             width: 60px;
@@ -61,6 +67,7 @@
             font-size: 20px;
             cursor: pointer;
             margin-bottom: 20px;
+            color: #1F4788;
         }
         .sidebar ul {
             list-style: none;
@@ -73,100 +80,145 @@
             color: #333;
             text-decoration: none;
             display: block;
-            padding: 10px;
-            border-radius: 4px;
+            padding: 12px;
+            border-radius: 6px;
+            transition: all 0.3s;
         }
         .sidebar a:hover {
-            background-color: #f0f0f0;
+            background-color: #F5F7FA;
+            color: #1F4788;
         }
         .sidebar.collapsed a {
             text-align: center;
-            padding: 10px 0;
+            padding: 12px 0;
         }
         .sidebar.collapsed .text {
             display: none;
         }
         .content {
             flex: 1;
-            padding: 20px;
+            padding: 30px;
             overflow-y: auto;
+            background: linear-gradient(135deg, #F5F7FA 0%, #E8EEF5 100%);
         }
         .container {
             max-width: 100%;
             background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
         }
         .detail h2 {
-            color: #6366F1;
+            color: #1F4788;
             margin-bottom: 20px;
+            font-size: 24px;
         }
         textarea {
             width: 100%;
             height: 200px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
             resize: vertical;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #1F4788;
         }
         .upload-section {
             margin: 20px 0;
         }
+        .upload-section label {
+            font-weight: 600;
+            color: #1F4788;
+            display: block;
+            margin-bottom: 10px;
+        }
+        #screenshot {
+            padding: 8px;
+        }
         .status-options {
             display: flex;
-            gap: 20px;
-            margin: 20px 0;
+            gap: 30px;
+            margin: 25px 0;
+            padding: 20px;
+            background: #F5F7FA;
+            border-radius: 8px;
         }
         .status-option {
             display: flex;
             align-items: center;
         }
         .status-option input {
-            margin-right: 5px;
+            margin-right: 8px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+        .status-option label {
+            margin: 0;
+            cursor: pointer;
+            font-weight: 600;
         }
         .name-input {
             margin: 20px 0;
         }
+        .name-input label {
+            display: block;
+            font-weight: 600;
+            color: #1F4788;
+            margin-bottom: 10px;
+        }
         .name-input input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            padding: 12px;
+            border: 2px solid #E0E0E0;
+            border-radius: 8px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .name-input input:focus {
+            outline: none;
+            border-color: #1F4788;
         }
         .submit-btn {
-            background-color: #4CAF50;
+            background: linear-gradient(135deg, #00A86B 0%, #008C45 100%);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
+            padding: 12px 30px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
         }
         .submit-btn:hover {
-            background-color: #45a049;
+            box-shadow: 0 5px 15px rgba(0, 168, 107, 0.4);
+            transform: translateY(-2px);
         }
         .back-btn {
-            background-color: #ccc;
+            background-color: #E0E0E0;
             color: #333;
             border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
+            padding: 12px 30px;
+            border-radius: 8px;
             cursor: pointer;
             margin-right: 10px;
+            font-weight: 600;
+            transition: all 0.3s;
         }
         .back-btn:hover {
-            background-color: #bbb;
+            background-color: #CCC;
         }
     </style>
 </head>
 <body>
     <nav class="navbar">
-        <div class="logo">NVS L1.5</div>
+        <div class="logo">Amxis Bank</div>
         <div class="menu">
             <a href="index.html">Home</a>
-            <a href="#">Accounts</a>
-            <a href="#">Loans</a>
+            <a href="#">Services</a>
+            <a href="#">Products</a>
             <a href="#">Support</a>
         </div>
     </nav>
@@ -174,10 +226,10 @@
         <aside class="sidebar" id="sidebar">
             <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
             <ul>
-                <li><a href="index.html"><span class="text">Dashboard</span></a></li>
-                <li><a href="index.html"><span class="text">Check Activity</span></a></li>
-                <li><a href="#"><span class="text">Reports</span></a></li>
-                <li><a href="#"><span class="text">Settings</span></a></li>
+                <li><a href="index.html"><span class="text">📊 Dashboard</span></a></li>
+                <li><a href="index.html"><span class="text">✓ System Checks</span></a></li>
+                <li><a href="#"><span class="text">📈 Reports</span></a></li>
+                <li><a href="#"><span class="text">⚙️ Settings</span></a></li>
             </ul>
         </aside>
         <div class="content">
@@ -192,23 +244,23 @@
                     <div class="status-options">
                         <div class="status-option">
                             <input type="radio" id="red" name="status" value="red">
-                            <label for="red">Red</label>
+                            <label for="red">Issue Found</label>
                         </div>
                         <div class="status-option">
                             <input type="radio" id="amber" name="status" value="amber">
-                            <label for="amber">Amber</label>
+                            <label for="amber">Partial Success</label>
                         </div>
                         <div class="status-option">
                             <input type="radio" id="green" name="status" value="green">
-                            <label for="green">Green</label>
+                            <label for="green">Healthy</label>
                         </div>
                     </div>
                     <div class="name-input">
-                        <label for="name">Your Name:</label>
+                        <label for="name">Verified By:</label>
                         <input type="text" id="name" placeholder="Enter your name">
                     </div>
-                    <button class="back-btn" onclick="window.location.href='index.html'">Back</button>
-                    <button class="submit-btn" onclick="submitCheck()">Submit</button>
+                    <button class="back-btn" onclick="window.location.href='index.html'">← Back</button>
+                    <button class="submit-btn" onclick="submitCheck()">✓ Submit Verification</button>
                 </div>
             </div>
         </div>
@@ -239,7 +291,7 @@
                 checked.push(currentCardId);
                 localStorage.setItem('checked', JSON.stringify(checked));
             }
-            alert(`Marked as checked by ${name} with status: ${status.value}`);
+            alert(`Verification submitted by ${name} with status: ${status.value}`);
             window.location.href = 'index.html';
         }
 
@@ -250,21 +302,21 @@
             if (id) {
                 currentCardId = id;
                 const headers = {
-                    1: "Account Verification",
-                    2: "Transaction Review",
-                    3: "Loan Application Check",
-                    4: "Compliance Audit",
-                    5: "Customer Feedback",
-                    6: "Security Update"
+                    1: "Customer Authentication Verification",
+                    2: "Transaction Processing Review",
+                    3: "Account Management Check",
+                    4: "Fund Transfer Service Audit",
+                    5: "Balance Inquiry System Check",
+                    6: "Security Compliance Verification"
                 };
-                document.getElementById('detail-header').textContent = headers[id] || "Detail";
+                document.getElementById('detail-header').textContent = headers[id] || "System Check";
                 const detailTexts = {
-                    1: "This detailed description provides comprehensive information about account verification. It includes specific guidelines, requirements, and steps to follow for accurate verification. Please ensure all criteria are met before selecting a status. For additional resources, refer to the https://www.google.com or contact the compliance team.",
-                    2: "This detailed description provides comprehensive information about transaction review. It includes specific guidelines, requirements, and steps to follow for accurate verification. Please ensure all criteria are met before selecting a status. For additional resources, refer to the https://www.nvsbank.com or contact the compliance team.",
-                    3: "This detailed description provides comprehensive information about loan application check. It includes specific guidelines, requirements, and steps to follow for accurate verification. Please ensure all criteria are met before selecting a status. For additional resources, refer to the https://www.rbi.org.in or contact the compliance team.",
-                    4: "This detailed description provides comprehensive information about compliance audit. It includes specific guidelines, requirements, and steps to follow for accurate verification. Please ensure all criteria are met before selecting a status. For additional resources, refer to the https://www.sebi.gov.in or contact the compliance team.",
-                    5: "This detailed description provides comprehensive information about customer feedback analysis. It includes specific guidelines, requirements, and steps to follow for accurate verification. Please ensure all criteria are met before selecting a status. For additional resources, refer to the https://www.surveymonkey.com or contact the compliance team.",
-                    6: "This detailed description provides comprehensive information about security update. It includes specific guidelines, requirements, and steps to follow for accurate verification. Please ensure all criteria are met before selecting a status. For additional resources, refer to the https://www.owasp.org or contact the compliance team."
+                    1: "This verification confirms customer identity authentication and secure access protocols. Verify proper implementation of multi-factor authentication, password policies, and login security measures. For additional resources, refer to https://www.rbi.org.in or contact the security team.",
+                    2: "This review ensures transaction processing accuracy and compliance with banking standards. Verify transaction routing, settlement procedures, and fund reconciliation. For additional resources, refer to https://www.swift.com or contact the operations team.",
+                    3: "This check validates account management systems and customer data integrity. Verify account creation, modification, and closure procedures. For additional resources, refer to https://www.bis.org or contact the compliance team.",
+                    4: "This audit verifies fund transfer systems and inter-bank communication protocols. Ensure NEFT, RTGS, and IMPS systems are functioning correctly. For additional resources, refer to https://www.npci.org.in or contact the technical team.",
+                    5: "This verification confirms real-time balance inquiry and account statement systems. Check real-time balance accuracy and statement generation. For additional resources, refer to https://www.iba.org.in or contact the support team.",
+                    6: "This compliance check verifies security protocols and encryption standards. Ensure data protection, SSL/TLS implementation, and vulnerability management. For additional resources, refer to https://www.owasp.org or contact the security team."
                 };
                 document.getElementById('detail-text').innerHTML = detailTexts[id] || "No details available.";
             }
