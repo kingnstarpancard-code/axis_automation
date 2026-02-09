@@ -5,101 +5,594 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Manager Dashboard - Amxis Bank</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1F4788 0%, #0F3A5F 100%);
+        * {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background: #F0F3F7;
             color: #333;
             min-height: 100vh;
+            padding: 0;
         }
-        h1 {
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #1F4788 0%, #2B5BAF 100%);
             color: white;
-            text-align: center;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            padding: 20px 40px;
+            box-shadow: 0 2px 8px rgba(31, 71, 136, 0.15);
         }
-        p {
-            text-align: center;
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 14px;
             color: #E8EEF5;
-            margin-bottom: 20px;
+            margin: 0;
+            font-weight: 400;
         }
+
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
+            padding: 30px 20px;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #D0D7E0;
+            background: white;
+            border-radius: 8px 8px 0 0;
+            padding: 0 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .tab-button {
+            padding: 16px 24px;
+            background: transparent;
+            color: #666;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            position: relative;
+            margin-bottom: -2px;
+        }
+
+        .tab-button:hover {
+            color: #1F4788;
+            border-bottom-color: #D0D7E0;
+        }
+
+        .tab-button.active {
+            color: #1F4788;
+            border-bottom-color: #1F4788;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .report-table {
             background: white;
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border: 1px solid #E0E6ED;
         }
+
+        .report-table h2 {
+            color: #1F4788;
+            font-size: 20px;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
+            margin-top: 0;
         }
-        table, th, td {
-            border: 1px solid #DDD;
+
+        table tbody tr {
+            border-bottom: 1px solid #E0E6ED;
+            transition: background-color 0.2s ease;
         }
+
+        table tbody tr:hover {
+            background-color: #F8F9FB;
+        }
+
         th, td {
-            padding: 12px;
+            padding: 14px 16px;
             text-align: left;
+            font-size: 14px;
         }
+
         th {
-            background: linear-gradient(135deg, #1F4788 0%, #2B5BAF 100%);
-            color: white;
+            background: #F5F7FA;
+            color: #1F4788;
+            font-weight: 700;
+            border-bottom: 2px solid #D0D7E0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 16px;
             font-weight: 600;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
-        tr:nth-child(even) {
-            background-color: #F5F7FA;
+
+        .status-success {
+            background: #E8F5E9;
+            color: #1B5E20;
         }
-        tr:hover {
-            background-color: #EDF2F7;
+
+        .status-failed {
+            background: #FFEBEE;
+            color: #B71C1C;
         }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+            border: 1px solid #E0E6ED;
+            border-left: 4px solid #1F4788;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(31, 71, 136, 0.1);
+        }
+
+        .stat-card h3 {
+            color: #999;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #1F4788;
+            margin-bottom: 4px;
+        }
+
+        .stat-card .unit {
+            font-size: 12px;
+            color: #999;
+        }
+
         .error {
             color: #E91E63;
-            font-weight: bold;
+            font-weight: 600;
         }
+
         img.screenshot {
             max-width: 150px;
             max-height: 100px;
-            border: 2px solid #1F4788;
+            border: 2px solid #E0E6ED;
             border-radius: 4px;
             cursor: pointer;
-            transition: transform 0.3s;
+            transition: all 0.3s ease;
         }
+
         img.screenshot:hover {
-            transform: scale(1.05);
+            transform: scale(1.08);
+            border-color: #1F4788;
+            box-shadow: 0 4px 12px rgba(31, 71, 136, 0.2);
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 60px 40px;
+            color: #999;
+            font-size: 16px;
+            background: #FAFBFC;
+            border-radius: 8px;
+            border: 1px dashed #D0D7E0;
+        }
+
+        .timestamp {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #1F4788 0%, #2B5BAF 100%);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            float: right;
+            margin-bottom: 20px;
+            font-size: 13px;
+            transition: all 0.2s ease;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(31, 71, 136, 0.3);
+        }
+
+        .refresh-btn:active {
+            transform: translateY(0);
+        }
+
+        h2 {
+            clear: both;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 15px 20px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .container {
+                padding: 20px 15px;
+            }
+
+            .tabs {
+                padding: 0 15px;
+                flex-wrap: wrap;
+            }
+
+            .tab-button {
+                padding: 12px 16px;
+                font-size: 13px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card {
+                padding: 18px;
+            }
+
+            .stat-card .number {
+                font-size: 28px;
+            }
+
+            table {
+                font-size: 12px;
+            }
+
+            th, td {
+                padding: 10px 12px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>🏦 Manager Dashboard - Verification Report</h1>
-    <p>Amxis Bank - System Health Monitoring and Verification Status</p>
+    <!-- Professional Header -->
+    <div class="header">
+        <h1>🏦 Manager Dashboard</h1>
+        <p>Amxis Bank System Monitoring & Job Execution Tracking</p>
+    </div>
+
     <div class="container">
-        <table id="reportTable">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>System Name</th>
-                    <th>Response Code</th>
-                    <th>Status</th>
-                    <th>Reason/Error</th>
-                    <th>Validation</th>
-                    <th>Screenshot</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Rows will be populated here by JavaScript -->
-            </tbody>
-        </table>
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab('executions')">📊 Job Executions</button>
+            <button class="tab-button" onclick="switchTab('verification')">✓ Verification Report</button>
+        </div>
+
+        <!-- Job Executions Tab -->
+        <div id="executions" class="tab-content active">
+            <button class="refresh-btn" onclick="loadExecutionHistory()">🔄 Refresh Data</button>
+            <div class="report-table">
+                <h2>Recent Job Executions</h2>
+                <div class="stats-grid" id="statsGrid"></div>
+                <table id="executionTable">
+                    <thead>
+                        <tr>
+                            <th>Execution ID</th>
+                            <th>Timestamp</th>
+                            <th>Status</th>
+                            <th>Total Checks</th>
+                            <th>Successful</th>
+                            <th>Failed</th>
+                            <th>Test Defects</th>
+                            <th>Duration (s)</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Verification Report Tab -->
+        <div id="verification" class="tab-content">
+            <button class="refresh-btn" onclick="loadReportData()">🔄 Refresh Data</button>
+            <div class="report-table">
+                <h2>System Check Verification Report</h2>
+                <table id="reportTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>System Name</th>
+                            <th>Response Code</th>
+                            <th>Status</th>
+                            <th>Reason/Error</th>
+                            <th>Validation</th>
+                            <th>Screenshot</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows will be populated here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Function to get report data from localStorage and populate the table
+        // Tab switching
+        function switchTab(tabName) {
+            // Hide all tabs
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Remove active from all buttons
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Mark button as active
+            event.target.classList.add('active');
+
+            // Load appropriate data
+            if (tabName === 'executions') {
+                loadExecutionHistory();
+            } else {
+                loadReportData();
+            }
+        }
+
+        // Load execution history from job_executions.json
+        function loadExecutionHistory() {
+            fetch('job_executions.json')
+                .then(response => response.json())
+                .then(data => {
+                    displayExecutionHistory(data);
+                    displayExecutionStats(data);
+                })
+                .catch(error => {
+                    console.error('Error loading executions:', error);
+                    const tbody = document.querySelector('#executionTable tbody');
+                    tbody.innerHTML = '<tr><td colspan="9" class="no-data">No execution data available yet</td></tr>';
+                });
+        }
+
+        // Display execution statistics
+        function displayExecutionStats(executions) {
+            if (executions.length === 0) {
+                document.getElementById('statsGrid').innerHTML = '<div class="no-data">No data</div>';
+                return;
+            }
+
+            const successful = executions.filter(e => e.status === 'success').length;
+            const failed = executions.filter(e => e.status === 'failed').length;
+            const totalChecks = executions.reduce((sum, e) => sum + (e.total_checks || 0), 0);
+            const lastExecution = executions[executions.length - 1];
+            const successRate = executions.length > 0 ? ((successful / executions.length) * 100).toFixed(1) : 0;
+
+            const statsHTML = `
+                <div class="stat-card">
+                    <h3>Total Executions</h3>
+                    <div class="number">${executions.length}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Successful Runs</h3>
+                    <div class="number" style="color: #00A86B;">${successful}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Failed Runs</h3>
+                    <div class="number" style="color: #E91E63;">${failed}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Checks Completed</h3>
+                    <div class="number">${totalChecks}</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Success Rate</h3>
+                    <div class="number" style="color: #1F4788;">${successRate}%</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Last Execution</h3>
+                    <div class="timestamp">${new Date(lastExecution.timestamp).toLocaleString()}</div>
+                </div>
+            `;
+
+            document.getElementById('statsGrid').innerHTML = statsHTML;
+        }
+
+        // Display execution history in table
+        function displayExecutionHistory(executions) {
+            const tbody = document.querySelector('#executionTable tbody');
+            tbody.innerHTML = '';
+
+            if (executions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="9" style="padding: 40px; text-align: center; color: #999;">No execution data available yet</td></tr>';
+                return;
+            }
+
+            // Display in reverse order (newest first)
+            executions.reverse().forEach(execution => {
+                const tr = document.createElement('tr');
+
+                const executionIdCell = document.createElement('td');
+                executionIdCell.textContent = execution.execution_id.substring(0, 8) + '...';
+                executionIdCell.title = execution.execution_id;
+                executionIdCell.style.fontSize = '12px';
+                executionIdCell.style.fontFamily = 'monospace';
+
+                const timestampCell = document.createElement('td');
+                timestampCell.textContent = new Date(execution.timestamp).toLocaleString();
+
+                const statusCell = document.createElement('td');
+                const statusBadge = document.createElement('span');
+                statusBadge.className = `status-badge ${execution.status === 'success' ? 'status-success' : 'status-failed'}`;
+                statusBadge.textContent = execution.status.toUpperCase();
+                statusCell.appendChild(statusBadge);
+
+                const totalChecksCell = document.createElement('td');
+                totalChecksCell.textContent = execution.total_checks || 0;
+                totalChecksCell.style.textAlign = 'center';
+
+                const successCountCell = document.createElement('td');
+                successCountCell.textContent = execution.success_count || 0;
+                successCountCell.style.textAlign = 'center';
+                successCountCell.style.color = '#00A86B';
+                successCountCell.style.fontWeight = '600';
+
+                const failureCountCell = document.createElement('td');
+                failureCountCell.textContent = execution.failure_count || 0;
+                failureCountCell.style.textAlign = 'center';
+                failureCountCell.style.color = '#E91E63';
+                failureCountCell.style.fontWeight = '600';
+
+                const defectsCell = document.createElement('td');
+                defectsCell.textContent = execution.simulated_defects || 0;
+                defectsCell.style.textAlign = 'center';
+
+                const durationCell = document.createElement('td');
+                durationCell.textContent = (execution.duration_seconds || 0).toFixed(2);
+                durationCell.style.textAlign = 'right';
+
+                const detailsCell = document.createElement('td');
+                const detailsBtn = document.createElement('a');
+                detailsBtn.href = '#';
+                detailsBtn.textContent = '📋 View';
+                detailsBtn.style.cursor = 'pointer';
+                detailsBtn.style.color = '#1F4788';
+                detailsBtn.style.textDecoration = 'none';
+                detailsBtn.style.fontWeight = '600';
+                detailsBtn.style.fontSize = '12px';
+                detailsBtn.onmouseover = () => {
+                    detailsBtn.style.textDecoration = 'underline';
+                };
+                detailsBtn.onmouseout = () => {
+                    detailsBtn.style.textDecoration = 'none';
+                };
+                detailsBtn.onclick = (e) => {
+                    e.preventDefault();
+                    showExecutionDetails(execution);
+                };
+                detailsCell.appendChild(detailsBtn);
+
+                tr.appendChild(executionIdCell);
+                tr.appendChild(timestampCell);
+                tr.appendChild(statusCell);
+                tr.appendChild(totalChecksCell);
+                tr.appendChild(successCountCell);
+                tr.appendChild(failureCountCell);
+                tr.appendChild(defectsCell);
+                tr.appendChild(durationCell);
+                tr.appendChild(detailsCell);
+
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Show execution details modal
+        function showExecutionDetails(execution) {
+            const details = `Execution Details
+═════════════════════════════════════════════════════════════
+
+ID:        ${execution.execution_id}
+Timestamp: ${execution.timestamp}
+Status:    ${execution.status.toUpperCase()}
+
+─────────────────────────────────────────────────────────────
+Checks Summary
+─────────────────────────────────────────────────────────────
+Total Checks:     ${execution.total_checks}
+Successful:       ${execution.success_count}
+Failed:           ${execution.failure_count}
+Simulated Defects: ${execution.simulated_defects}
+
+─────────────────────────────────────────────────────────────
+File Outputs
+─────────────────────────────────────────────────────────────
+Report File:  ${execution.report_file}
+Alerts File:  ${execution.alerts_file}
+
+─────────────────────────────────────────────────────────────
+Duration:  ${execution.duration_seconds.toFixed(2)} seconds
+═════════════════════════════════════════════════════════════`;
+            alert(details);
+        }
+
+        // Load verification report data from localStorage
         function loadReportData() {
             const reportData = JSON.parse(localStorage.getItem('reportData')) || [];
             const tableBody = document.querySelector('#reportTable tbody');
             tableBody.innerHTML = '';
+
+            if (reportData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="7" style="padding: 40px; text-align: center; color: #999;">No verification data available. Complete a system check to see data here.</td></tr>';
+                return;
+            }
 
             reportData.forEach(item => {
                 const tr = document.createElement('tr');
@@ -114,6 +607,8 @@
 
                 const responseCodeTd = document.createElement('td');
                 responseCodeTd.textContent = item.responseCode !== null ? item.responseCode : 'N/A';
+                responseCodeTd.style.textAlign = 'center';
+                responseCodeTd.style.fontWeight = '600';
                 tr.appendChild(responseCodeTd);
 
                 const statusTd = document.createElement('td');
@@ -133,7 +628,6 @@
 
                 const screenshotTd = document.createElement('td');
                 if (item.id) {
-                    // Assuming screenshots saved as screenshots/screenshot_ID.png relative to this html file
                     const img = document.createElement('img');
                     img.src = `screenshots/screenshot_${item.id}.png`;
                     img.alt = `Screenshot ${item.id}`;
@@ -151,8 +645,12 @@
             });
         }
 
+        // Auto-refresh execution history every 30 seconds
+        setInterval(loadExecutionHistory, 30000);
+
+        // Load data on page load
         window.onload = () => {
-            loadReportData();
+            loadExecutionHistory();
         };
     </script>
 </body>
